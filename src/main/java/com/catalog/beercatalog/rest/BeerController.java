@@ -1,10 +1,11 @@
 package com.catalog.beercatalog.rest;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.catalog.beercatalog.entity.Beer;
+import com.catalog.beercatalog.service.BeerService;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,33 +19,53 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/beers")
 public class BeerController {
 
+    @Autowired
+    private BeerService beerSv;
+
     @GetMapping()
     public List<Beer> findAll() {
-        // TODO
-        return new ArrayList<>();
+
+        return beerSv.findAll();
     }
 
     @GetMapping("/{id}")
     public Beer findById(@PathVariable Long id) {
-        // TODO
-        return new Beer();
+
+        Beer beer = beerSv.findById(id);
+
+        if (beer == null) {
+            //TODO exception handling
+        }
+
+        return beer;
     }
 
     @PostMapping()
     public Beer addBeer(@RequestBody Beer beer) {
-        // TODO
-        return new Beer();
+
+        // In case the id its defined we set it to 0 to manually force the insert
+        beer.setId(Long.valueOf(0));
+
+        return beerSv.save(beer);
     }
 
     @PutMapping()
     public Beer updateBeer(@RequestBody Beer beer) {
-        // TODO
-        return new Beer();
+        
+        return beerSv.save(beer);
     }
 
     @DeleteMapping("/{id}")
     public String deleteBeer(@PathVariable Long id) {
-        // TODO
-        return "Beer deleted with id: ";
+
+        Beer beerToDelete = beerSv.findById(id);
+
+        if (beerToDelete == null) {
+           //TODO exception handling
+        }
+
+        beerSv.deleteById(id);
+
+        return "Beer deleted with id: " + id;
     }
 }

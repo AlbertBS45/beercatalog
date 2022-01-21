@@ -1,10 +1,11 @@
 package com.catalog.beercatalog.rest;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.catalog.beercatalog.entity.Manufacturer;
+import com.catalog.beercatalog.service.ManufacturerService;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,34 +19,52 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/manufacturers")
 public class ManufacturerController {
 
+    @Autowired
+    private ManufacturerService manufacturerSv;
+
     @GetMapping()
     public List<Manufacturer> findAll() {
-        //TODO
-        return new ArrayList<>();
+
+        return manufacturerSv.findAll();
     }
 
     @GetMapping("/{id}")
     public Manufacturer findById(@PathVariable Long id) {
-        //TODO
-        return new Manufacturer();
+
+        Manufacturer manufacturer = manufacturerSv.findById(id);
+
+        if (manufacturer == null) {
+            // TODO exception handling
+        }
+
+        return manufacturer;
     }
 
     @PostMapping()
     public Manufacturer addManufacturer(@RequestBody Manufacturer manufacturer) {
-        //TODO
-        return new Manufacturer();
+
+        // In case the id its defined we set it to 0 to manually force the insert
+        manufacturer.setId(Long.valueOf(0));
+
+        return manufacturerSv.save(manufacturer);
     }
 
     @PutMapping()
     public Manufacturer updateManufacturer(@RequestBody Manufacturer manufacturer) {
-        //TODO
-        return new Manufacturer();
+        return manufacturerSv.save(manufacturer);
     }
 
     @DeleteMapping("/{id}")
-    public String deleteManufacturer(@PathVariable Long id) {   
-        //TODO
+    public String deleteManufacturer(@PathVariable Long id) {
+
+        Manufacturer manufacturerToDelete = manufacturerSv.findById(id);
+
+        if (manufacturerToDelete == null) {
+            // TODO exception handling
+        }
+
+        manufacturerSv.deleteById(id);
+
         return "Manufacturer deleted with id: " + id;
     }
 }
-
