@@ -1,13 +1,18 @@
 package com.catalog.beercatalog.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
 import com.catalog.beercatalog.entity.Beer;
 import com.catalog.beercatalog.repository.BeerRepository;
+import com.catalog.beercatalog.service.utils.ServiceUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 @Service
 public class BeerService {
@@ -15,8 +20,42 @@ public class BeerService {
     @Autowired
     private BeerRepository beerRepo;
 
-    public List<Beer> findAll() {
-        return beerRepo.findAll();
+    public List<Beer> findAll(
+        String name, 
+        String type, 
+        BigDecimal abvGt,
+        BigDecimal abvLt,
+        Long manufacturerId,
+        String manufacturerName,
+        String manufacturerNationality,
+        Integer pageNum, 
+        Integer pageSize, 
+        String sort[]) 
+    {
+        // Making the request pageable and sortable
+        Pageable paging = ServiceUtils.generatePagingAndSorting(pageNum, pageSize, sort);
+        
+        // Setting params values for query
+        String beerParamName = (StringUtils.hasText(name) ? name : null);
+        String beerParamType = (StringUtils.hasText(type) ? type : null);
+        BigDecimal beerParamAbvGt = abvGt != null ? abvGt : null;
+        BigDecimal beerParamAbvLt = abvLt != null ? abvLt : null;
+        Long beerManufacterId = manufacturerId != null ? manufacturerId : null;
+        String beerManufacterName = (StringUtils.hasText(manufacturerName) ? manufacturerName : null);
+        String beerManufacterNationality = (StringUtils.hasText(manufacturerNationality) ? manufacturerNationality : null);
+
+        // Executing query
+        Page<Beer> pagedResult = beerRepo.findAllBeersWithPaginationAndSorting(
+            beerParamName, 
+            beerParamType, 
+            beerParamAbvGt, 
+            beerParamAbvLt, 
+            beerManufacterId,
+            beerManufacterName,
+            beerManufacterNationality,
+            paging);
+
+        return pagedResult.getContent();
     }
 
     public Beer findById(Long id) {
@@ -32,6 +71,8 @@ public class BeerService {
         return beer;
     }
 
+    
+
     public Beer save(Beer beer) {
         Beer beerAddedOrUpdated = beerRepo.save(beer);
 
@@ -45,4 +86,5 @@ public class BeerService {
     public void deleteById(Long id) {
         beerRepo.deleteById(id);
     }
+    
 }

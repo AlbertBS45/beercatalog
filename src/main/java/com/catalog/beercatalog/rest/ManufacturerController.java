@@ -13,19 +13,30 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/manufacturers")
 public class ManufacturerController {
-
+    
     @Autowired
     private ManufacturerService manufacturerSv;
 
     @GetMapping()
-    public List<Manufacturer> findAll() {
-
-        return manufacturerSv.findAll();
+    public List<Manufacturer> findAll(
+        @RequestParam(required = false, name = "name") String name,
+        @RequestParam(required = false, name = "nationality") String nationality,
+        @RequestParam(defaultValue = "0") Integer pageNum,
+        @RequestParam(defaultValue = "10") Integer pageSize,
+        @RequestParam(defaultValue = "id,asc") String[] sort) 
+    {
+        return manufacturerSv.findAll(
+            name,
+            nationality,
+            pageNum, 
+            pageSize, 
+            sort);
     }
 
     @GetMapping("/{id}")
@@ -34,7 +45,7 @@ public class ManufacturerController {
         Manufacturer manufacturer = manufacturerSv.findById(id);
 
         if (manufacturer == null) {
-            // TODO exception handling
+            //TODO exception handling
         }
 
         return manufacturer;
@@ -60,7 +71,7 @@ public class ManufacturerController {
         Manufacturer manufacturerToDelete = manufacturerSv.findById(id);
 
         if (manufacturerToDelete == null) {
-            // TODO exception handling
+            //TODO exception handling
         }
 
         manufacturerSv.deleteById(id);

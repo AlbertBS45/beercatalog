@@ -1,5 +1,6 @@
 package com.catalog.beercatalog.rest;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.catalog.beercatalog.entity.Beer;
@@ -13,19 +14,40 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/beers")
 public class BeerController {
-
+    
     @Autowired
     private BeerService beerSv;
 
     @GetMapping()
-    public List<Beer> findAll() {
-
-        return beerSv.findAll();
+    public List<Beer> findAll(
+        @RequestParam(required = false, name = "name") String name, 
+        @RequestParam(required = false, name = "type") String type,
+        @RequestParam(required = false, name = "abv_gt") BigDecimal abvGt,
+        @RequestParam(required = false, name = "abv_lt") BigDecimal abvLt,
+        @RequestParam(required = false, name = "manufacturer_id") Long manufacturerId,
+        @RequestParam(required = false, name = "manufacturer_name") String manufacturerName,
+        @RequestParam(required = false, name = "manufacturer_nationality") String manufacturerNationality,
+        @RequestParam(defaultValue = "0") Integer pageNum, 
+        @RequestParam(defaultValue = "10") Integer pageSize,
+        @RequestParam(defaultValue = "id,asc") String[] sort)
+    {
+        return beerSv.findAll(
+            name, 
+            type, 
+            abvGt, 
+            abvLt, 
+            manufacturerId, 
+            manufacturerName, 
+            manufacturerNationality, 
+            pageNum, 
+            pageSize, 
+            sort);
     }
 
     @GetMapping("/{id}")
@@ -51,7 +73,6 @@ public class BeerController {
 
     @PutMapping()
     public Beer updateBeer(@RequestBody Beer beer) {
-        
         return beerSv.save(beer);
     }
 
