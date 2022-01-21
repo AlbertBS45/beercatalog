@@ -1,0 +1,33 @@
+version: '3.8'
+services:
+  API:
+    image: 'beercatalog.jar'
+    ports:
+      - "8080:8080"
+    depends_on:
+      PostgreSQL:
+        condition: service_healthy
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://PostgreSQL:5432/beercatalog
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=password
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=none
+
+  PostgreSQL:
+    image: postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    volumes: 
+      - ./postgres-data:/var/lib/postgresql/data
+      # copy the sql script to create tables and populate db
+      - ./sql/create_db_tables_populate.sql:/docker-entrypoint-initdb.d/create_db_tables_populate.sql
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=beercatalog
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5

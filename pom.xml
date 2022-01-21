@@ -90,6 +90,7 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		<finalName>beercatalog</finalName>
 	</build>
 
 </project>
