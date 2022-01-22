@@ -1,12 +1,21 @@
 package com.catalog.beercatalog.rest;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.catalog.beercatalog.entity.Beer;
+import com.catalog.beercatalog.exception.NotFoundException;
 import com.catalog.beercatalog.service.BeerService;
+import com.catalog.beercatalog.utils.DateFormatUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,7 +34,7 @@ public class BeerController {
     private BeerService beerSv;
 
     @GetMapping()
-    public List<Beer> findAll(
+    public ResponseEntity<Map<String, Object>> findAll(
         @RequestParam(required = false, name = "name") String name, 
         @RequestParam(required = false, name = "type") String type,
         @RequestParam(required = false, name = "abv_gt") BigDecimal abvGt,
@@ -33,11 +42,15 @@ public class BeerController {
         @RequestParam(required = false, name = "manufacturer_id") Long manufacturerId,
         @RequestParam(required = false, name = "manufacturer_name") String manufacturerName,
         @RequestParam(required = false, name = "manufacturer_nationality") String manufacturerNationality,
-        @RequestParam(defaultValue = "0") Integer pageNum, 
+        @RequestParam(defaultValue = "1") Integer pageNum, 
         @RequestParam(defaultValue = "10") Integer pageSize,
         @RequestParam(defaultValue = "id,asc") String[] sort)
     {
-        return beerSv.findAll(
+
+        List<Beer> beers = new ArrayList<Beer>();
+
+        // Get the paged and sorted result
+        Page<Beer> pagedResult = beerSv.findAll(
             name, 
             type, 
             abvGt, 
@@ -48,6 +61,22 @@ public class BeerController {
             pageNum, 
             pageSize, 
             sort);
+
+        beers = pagedResult.getContent();
+
+        if (beers.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        // Map the result with pagination info
+        Map<String, Object> response = new LinkedHashMap<>();
+        response.put("currentPage", pagedResult.getNumber() + 1);
+        response.put("totalPages", pagedResult.getTotalPages());
+        response.put("pageSize", pageSize);
+        response.put("totalItems", pagedResult.getTotalElements());
+        response.put("beers", beers);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -56,7 +85,7 @@ public class BeerController {
         Beer beer = beerSv.findById(id);
 
         if (beer == null) {
-            //TODO exception handling
+            throw new NotFoundException("Beer not found with id: " + id);
         }
 
         return beer;
@@ -77,16 +106,18 @@ public class BeerController {
     }
 
     @DeleteMapping("/{id}")
-    public String deleteBeer(@PathVariable Long id) {
+    public ResponseEntity<RestResponse> deleteBeer(@PathVariable Long id) {
 
         Beer beerToDelete = beerSv.findById(id);
 
         if (beerToDelete == null) {
-           //TODO exception handling
+            throw new NotFoundException("Could not find beer with: " + id + " for deletion.");
         }
 
         beerSv.deleteById(id);
 
-        return "Beer deleted with id: " + id;
+        RestResponse response = new RestResponse(202, "Beer deleted with id: " + id, DateFormatUtil.getFormattedDate(new Date()));
+        
+        return new ResponseEntity<RestResponse>(response, HttpStatus.ACCEPTED);
     }
 }

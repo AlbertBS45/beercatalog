@@ -1,11 +1,20 @@
 package com.catalog.beercatalog.rest;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.catalog.beercatalog.entity.Manufacturer;
+import com.catalog.beercatalog.exception.NotFoundException;
 import com.catalog.beercatalog.service.ManufacturerService;
+import com.catalog.beercatalog.utils.DateFormatUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,19 +33,39 @@ public class ManufacturerController {
     private ManufacturerService manufacturerSv;
 
     @GetMapping()
-    public List<Manufacturer> findAll(
+    public ResponseEntity<Map<String, Object>> findAll(
         @RequestParam(required = false, name = "name") String name,
         @RequestParam(required = false, name = "nationality") String nationality,
-        @RequestParam(defaultValue = "0") Integer pageNum,
+        @RequestParam(defaultValue = "1") Integer pageNum,
         @RequestParam(defaultValue = "10") Integer pageSize,
         @RequestParam(defaultValue = "id,asc") String[] sort) 
     {
-        return manufacturerSv.findAll(
+
+        List<Manufacturer> manufacturers = new ArrayList<Manufacturer>();
+
+        // Get the paged and sorted result
+        Page<Manufacturer> pagedResult = manufacturerSv.findAll(
             name,
             nationality,
             pageNum, 
             pageSize, 
             sort);
+
+        manufacturers = pagedResult.getContent();
+
+        if (manufacturers.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        // Map the result with pagination info
+        Map<String, Object> response = new LinkedHashMap<>();
+        response.put("currentPage", pagedResult.getNumber() + 1);
+        response.put("totalPages", pagedResult.getTotalPages());
+        response.put("pageSize", pageSize);
+        response.put("totalItems", pagedResult.getTotalElements());
+        response.put("manufacturers", manufacturers);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -45,7 +74,7 @@ public class ManufacturerController {
         Manufacturer manufacturer = manufacturerSv.findById(id);
 
         if (manufacturer == null) {
-            //TODO exception handling
+            throw new NotFoundException("Manufacturer not found with id: " + id);
         }
 
         return manufacturer;
@@ -66,16 +95,18 @@ public class ManufacturerController {
     }
 
     @DeleteMapping("/{id}")
-    public String deleteManufacturer(@PathVariable Long id) {
+    public ResponseEntity<RestResponse> deleteManufacturer(@PathVariable Long id) {
 
         Manufacturer manufacturerToDelete = manufacturerSv.findById(id);
 
         if (manufacturerToDelete == null) {
-            //TODO exception handling
+            throw new NotFoundException("Could not find manufacturer with: " + id + " for deletion.");
         }
 
         manufacturerSv.deleteById(id);
 
-        return "Manufacturer deleted with id: " + id;
+        RestResponse response = new RestResponse(202, "Manufacturer deleted with id: " + id, DateFormatUtil.getFormattedDate(new Date()));
+
+        return new ResponseEntity<RestResponse>(response, HttpStatus.ACCEPTED);
     }
 }

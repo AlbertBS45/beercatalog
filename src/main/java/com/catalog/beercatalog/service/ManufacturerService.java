@@ -1,11 +1,10 @@
 package com.catalog.beercatalog.service;
 
-import java.util.List;
 import java.util.Optional;
 
 import com.catalog.beercatalog.entity.Manufacturer;
 import com.catalog.beercatalog.repository.ManufacturerRepository;
-import com.catalog.beercatalog.service.utils.ServiceUtils;
+import com.catalog.beercatalog.utils.ServiceUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,15 +18,18 @@ public class ManufacturerService {
     @Autowired
     private ManufacturerRepository manufacturerRepo;
 
-    public List<Manufacturer> findAll(
+    public Page<Manufacturer> findAll(
         String name,
         String nationality,
         Integer pageNum, 
         Integer pageSize, 
         String[] sort) 
     {
+        // Setting the correct format for pageNum
+        pageNum--;
+
         // Making the request pageable and sortable
-        Pageable paging = ServiceUtils.generatePagingAndSorting(pageNum, pageSize, sort);
+        Pageable paging = ServiceUtil.generatePagingAndSorting(pageNum, pageSize, sort);
         
         // Setting params values for query
         String ManufacturerParamName = (StringUtils.hasText(name) ? name : null);
@@ -39,7 +41,7 @@ public class ManufacturerService {
             ManufacturerParamNat,
             paging);
 
-        return pagedResult.getContent(); 
+        return pagedResult; 
     }
 
     public Manufacturer findById(Long id) {

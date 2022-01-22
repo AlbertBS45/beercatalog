@@ -1,12 +1,11 @@
 package com.catalog.beercatalog.service;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Optional;
 
 import com.catalog.beercatalog.entity.Beer;
 import com.catalog.beercatalog.repository.BeerRepository;
-import com.catalog.beercatalog.service.utils.ServiceUtils;
+import com.catalog.beercatalog.utils.ServiceUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,7 +19,7 @@ public class BeerService {
     @Autowired
     private BeerRepository beerRepo;
 
-    public List<Beer> findAll(
+    public Page<Beer> findAll(
         String name, 
         String type, 
         BigDecimal abvGt,
@@ -32,8 +31,12 @@ public class BeerService {
         Integer pageSize, 
         String sort[]) 
     {
+
+        // Setting the correct format for pageNum
+        pageNum--;
+
         // Making the request pageable and sortable
-        Pageable paging = ServiceUtils.generatePagingAndSorting(pageNum, pageSize, sort);
+        Pageable paging = ServiceUtil.generatePagingAndSorting(pageNum, pageSize, sort);
         
         // Setting params values for query
         String beerParamName = (StringUtils.hasText(name) ? name : null);
@@ -54,8 +57,8 @@ public class BeerService {
             beerManufacterName,
             beerManufacterNationality,
             paging);
-
-        return pagedResult.getContent();
+        
+        return pagedResult;
     }
 
     public Beer findById(Long id) {
