@@ -1,4 +1,4 @@
-package com.catalog.beercatalog.service.utils;
+package com.catalog.beercatalog.utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
 
-public class ServiceUtils {
+public class ServiceUtil {
     
     public static Pageable generatePagingAndSorting(Integer pageNum, Integer pageSize, String[] sort) {
 
