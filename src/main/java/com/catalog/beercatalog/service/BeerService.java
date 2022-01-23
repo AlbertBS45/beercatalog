@@ -10,8 +10,8 @@ import com.catalog.beercatalog.utils.ServiceUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 @Service
@@ -20,6 +20,7 @@ public class BeerService {
     @Autowired
     private BeerRepository beerRepo;
 
+    @Transactional(readOnly = true)
     public Page<Beer> findAll(
         String name, 
         String type, 
@@ -62,6 +63,7 @@ public class BeerService {
         return pagedResult;
     }
 
+    @Transactional(readOnly = true)
     public Beer findById(Long id) {
 
         Optional<Beer> beerOpt = beerRepo.findById(id);
@@ -75,18 +77,13 @@ public class BeerService {
         return beer;
     }
     
-    @PreAuthorize("isItOwnManufacturer(#beer)")
+    @Transactional()
     public Beer save(Beer beer) {
 
-        Beer beerAddedOrUpdated = beerRepo.save(beer);
-
-        if (beerAddedOrUpdated == null) {
-            //TODO exception handling
-        }
-
-        return beerAddedOrUpdated;
+        return beerRepo.save(beer);
     }
 
+    @Transactional()
     public void deleteById(Long id) {
         beerRepo.deleteById(id);
     }
