@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.catalog.beercatalog.entity.Beer;
+import com.catalog.beercatalog.exception.MissingRequiredsException;
 import com.catalog.beercatalog.exception.NotFoundException;
 import com.catalog.beercatalog.service.BeerService;
 import com.catalog.beercatalog.utils.DateFormatUtil;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -91,20 +93,39 @@ public class BeerController {
         return beer;
     }
 
+    @PreAuthorize("isItOwnManufacturer(#beer)")
     @PostMapping()
     public Beer addBeer(@RequestBody Beer beer) {
 
-        // In case the id its defined we set it to 0 to manually force the insert
+        if (beer.getName() == null || 
+            beer.getDescription() == null || 
+            beer.getAbv() == null || 
+            beer.getManufacturer().getId() == null) {
+                throw new MissingRequiredsException("The requested action could not be executed when required fields are missing."); 
+        }
+
+        // In case the id is defined we set it to 0 for manually force the insert
         beer.setId(Long.valueOf(0));
 
         return beerSv.save(beer);
     }
 
+    @PreAuthorize("isItOwnManufacturer(#beer)")
     @PutMapping()
     public Beer updateBeer(@RequestBody Beer beer) {
+
+        if (beer.getId() == null || 
+            beer.getName() == null || 
+            beer.getDescription() == null || 
+            beer.getAbv() == null || 
+            beer.getManufacturer().getId() == null) {
+                throw new MissingRequiredsException("The requested action could not be executed when required fields are missing.");
+        }
+
         return beerSv.save(beer);
     }
 
+    @PreAuthorize("isItOwnManufacturer(#beer)")
     @DeleteMapping("/{id}")
     public ResponseEntity<RestResponse> deleteBeer(@PathVariable Long id) {
 
