@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.catalog.beercatalog.entity.Manufacturer;
+import com.catalog.beercatalog.exception.MissingRequiredsException;
 import com.catalog.beercatalog.exception.NotFoundException;
 import com.catalog.beercatalog.service.ManufacturerService;
 import com.catalog.beercatalog.utils.DateFormatUtil;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -83,14 +85,27 @@ public class ManufacturerController {
     @PostMapping()
     public Manufacturer addManufacturer(@RequestBody Manufacturer manufacturer) {
 
-        // In case the id its defined we set it to 0 to manually force the insert
+        if (manufacturer.getName() == null || 
+            manufacturer.getNationality() == null) {
+                throw new MissingRequiredsException("The requested action could not be executed when required fields are missing."); 
+        }
+
+        // In case the id is defined we set it to 0 to manually force the insert
         manufacturer.setId(Long.valueOf(0));
 
         return manufacturerSv.save(manufacturer);
     }
 
+    @PreAuthorize("isItOwnManufacturer(#manufacturer)")
     @PutMapping()
     public Manufacturer updateManufacturer(@RequestBody Manufacturer manufacturer) {
+
+        if (manufacturer.getId() == null || 
+            manufacturer.getName() == null || 
+            manufacturer.getNationality() == null) {
+                throw new MissingRequiredsException("The requested action could not be executed when required fields are missing."); 
+        }
+
         return manufacturerSv.save(manufacturer);
     }
 
@@ -105,7 +120,10 @@ public class ManufacturerController {
 
         manufacturerSv.deleteById(id);
 
-        RestResponse response = new RestResponse(202, "Manufacturer deleted with id: " + id, DateFormatUtil.getFormattedDate(new Date()));
+        RestResponse response = new RestResponse(
+            202,
+            "Manufacturer deleted with id: " + id + ". User, authorities and all related beers to the manufacturer were also deleted.", 
+            DateFormatUtil.getFormattedDate(new Date()));
 
         return new ResponseEntity<RestResponse>(response, HttpStatus.ACCEPTED);
     }
