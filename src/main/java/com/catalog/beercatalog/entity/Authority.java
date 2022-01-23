@@ -24,4 +24,13 @@ public class Authority {
     @ManyToOne
     @JoinColumn(name = "provider_id")
     private Provider provider;
+
+    public Authority() {}
+
+    public Authority(String name, Provider provider) {
+        this.name = name;
+        this.provider = provider;
+    }
+
+    
 }
