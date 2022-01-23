@@ -1,7 +1,5 @@
 package com.catalog.beercatalog.entity;
 
-import java.util.List;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,9 +11,6 @@ import lombok.Data;
 @Entity
 @Table(name = "manufacturers")
 @Data
-// @NamedEntityGraph(name = "Manufacturer.beers",
-//     attributeNodes = @NamedAttributeNode("beers")
-// )
 public class Manufacturer {
     
     @Id
@@ -28,7 +23,7 @@ public class Manufacturer {
 
     public Manufacturer() {}
 
-    public Manufacturer(String name, String nationality, List<Beer> beers) {
+    public Manufacturer(String name, String nationality) {
         this.name = name;
         this.nationality = nationality;
     }
