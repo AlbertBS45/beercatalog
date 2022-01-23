@@ -1,15 +1,15 @@
 CREATE TABLE manufacturers (
     id SERIAL PRIMARY KEY,
-    name VARCHAR,
-    nationality VARCHAR
+    name VARCHAR NOT NULL,
+    nationality VARCHAR NOT NULL
 );
 
 CREATE TABLE beers (
     id SERIAL PRIMARY KEY,
-    name VARCHAR,
-    type VARCHAR,
-    description VARCHAR,
-    abv NUMERIC,
+    name VARCHAR NOT NULL,
+    type VARCHAR NOT NULL,
+    description VARCHAR NOT NULL,
+    abv NUMERIC NOT NULL,
     manufacturer_id INTEGER REFERENCES manufacturers(id)
 );
 
@@ -17,7 +17,6 @@ CREATE TABLE providers (
     id SERIAL PRIMARY KEY,
     email VARCHAR UNIQUE NOT NULL,
     pwd VARCHAR NOT NULL,
-    role VARCHAR NOT NULL,
     manufacturer_id INTEGER,
     FOREIGN KEY (manufacturer_id) REFERENCES manufacturers(id)
 );
@@ -67,12 +66,12 @@ VALUES
     ('Hefe-Weissbier Naturtrüb', 'Hefeweizen', 'Cloudy in appearance, it presents itself in the glass with a brilliant velvety golden color, under a robust crown of foam that truly deserves this name.', 5.5, 6);
 
 
-INSERT INTO providers (email, pwd, role, manufacturer_id)
+INSERT INTO providers (email, pwd, manufacturer_id)
 VALUES
-    ('admin@admin.com', '$2a$12$LvGIZQcdC8puHqoWj2d1Q.f8OeHqYOjYM98e/KtYF9gU/qORCdhWS', 'Admin', null),
-    ('victory@provider.com', '$2a$12$tu/q0PZskDF9kk.KRPnys.aQcnqU6JdLPOp4bOjIgfwK07N4nSDRC', 'Manufacturer', 2),
-    ('tröegs@provider.com', '$2a$12$tu/q0PZskDF9kk.KRPnys.aQcnqU6JdLPOp4bOjIgfwK07N4nSDRC', 'Manufacturer', 3),
-    ('paulaner@provider.com', '$2a$12$tu/q0PZskDF9kk.KRPnys.aQcnqU6JdLPOp4bOjIgfwK07N4nSDRC', 'Manufacturer', 6);
+    ('admin@admin.com', '$2a$12$LvGIZQcdC8puHqoWj2d1Q.f8OeHqYOjYM98e/KtYF9gU/qORCdhWS', null),
+    ('victory@provider.com', '$2a$12$tu/q0PZskDF9kk.KRPnys.aQcnqU6JdLPOp4bOjIgfwK07N4nSDRC', 2),
+    ('tröegs@provider.com', '$2a$12$tu/q0PZskDF9kk.KRPnys.aQcnqU6JdLPOp4bOjIgfwK07N4nSDRC', 3),
+    ('paulaner@provider.com', '$2a$12$tu/q0PZskDF9kk.KRPnys.aQcnqU6JdLPOp4bOjIgfwK07N4nSDRC', 6);
 
 
 INSERT INTO authorities (provider_id, name)
