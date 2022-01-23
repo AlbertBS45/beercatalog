@@ -10,6 +10,7 @@ import com.catalog.beercatalog.utils.ServiceUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -73,10 +74,10 @@ public class BeerService {
 
         return beer;
     }
-
     
-
+    @PreAuthorize("isItOwnManufacturer(#beer)")
     public Beer save(Beer beer) {
+
         Beer beerAddedOrUpdated = beerRepo.save(beer);
 
         if (beerAddedOrUpdated == null) {
