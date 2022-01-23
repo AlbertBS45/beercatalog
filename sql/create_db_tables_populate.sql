@@ -13,6 +13,22 @@ CREATE TABLE beers (
     manufacturer_id INTEGER REFERENCES manufacturers(id)
 );
 
+CREATE TABLE providers (
+    id SERIAL PRIMARY KEY,
+    email VARCHAR UNIQUE NOT NULL,
+    pwd VARCHAR NOT NULL,
+    role VARCHAR NOT NULL,
+    manufacturer_id INTEGER,
+    FOREIGN KEY (manufacturer_id) REFERENCES manufacturers(id)
+);
+
+CREATE TABLE authorities (
+    id SERIAL PRIMARY KEY,
+    provider_id INTEGER NOT NULL,
+    name VARCHAR NOT NULL,
+    FOREIGN KEY (provider_id) REFERENCES providers(id)
+);
+
 INSERT INTO manufacturers (name, nationality)
 VALUES 
     ('Anheuser-Busch', 'United States'),
@@ -47,5 +63,21 @@ VALUES
     ('Brooklyn Brown Ale', 'American Brown Ale', 'This is the award-winning original American brown ale, first brewed as a holiday specialty, and now one of our most popular beers year-round. Northern English brown ales tend to be strong and dry, while southern English brown ales are milder and sweeter.', 5.6, 11),
     ('Newcastle Brown Ale', 'English Brown Ale', 'Newcastle Brown Ale (4.7% ABV) is full-bodied and smooth, showing restrained caramel and notes of bananas and dried fruit.', 4.7, 12),
     ('Doom Bar', 'English Bitter', 'Doom Bar is inspired by its namesake, the treacherous sandbank at the mouth of the Camel Estuary near Sharps home at Rock. Accomplished and precise, Doom Bar is the epitomy of consistency, balance and moreish appeal and is now the UK''s no.1 selling cask beer.', 4.3, 13),
-    ('Black Sheep Ale', 'English Pale Ale', 'Black Sheep Ale is a full flavoured premium bitter with a rich, fruity aroma. Brewed using generous handfuls of choice Golding hops, it has a perfectly balanced bittersweet, malty taste with a long, dry and bitter finish.', 4.4, 14);
+    ('Black Sheep Ale', 'English Pale Ale', 'Black Sheep Ale is a full flavoured premium bitter with a rich, fruity aroma. Brewed using generous handfuls of choice Golding hops, it has a perfectly balanced bittersweet, malty taste with a long, dry and bitter finish.', 4.4, 14),
+    ('Hefe-Weissbier Naturtrüb', 'Hefeweizen', 'Cloudy in appearance, it presents itself in the glass with a brilliant velvety golden color, under a robust crown of foam that truly deserves this name.', 5.5, 6);
 
+
+INSERT INTO providers (email, pwd, role, manufacturer_id)
+VALUES
+    ('admin@admin.com', '$2a$12$LvGIZQcdC8puHqoWj2d1Q.f8OeHqYOjYM98e/KtYF9gU/qORCdhWS', 'Admin', null),
+    ('victory@provider.com', '$2a$12$tu/q0PZskDF9kk.KRPnys.aQcnqU6JdLPOp4bOjIgfwK07N4nSDRC', 'Manufacturer', 2),
+    ('tröegs@provider.com', '$2a$12$tu/q0PZskDF9kk.KRPnys.aQcnqU6JdLPOp4bOjIgfwK07N4nSDRC', 'Manufacturer', 3),
+    ('paulaner@provider.com', '$2a$12$tu/q0PZskDF9kk.KRPnys.aQcnqU6JdLPOp4bOjIgfwK07N4nSDRC', 'Manufacturer', 6);
+
+
+INSERT INTO authorities (provider_id, name)
+VALUES 
+    (1, 'ROLE_ADMIN'),
+    (2, 'ROLE_MANUFACTURER'),
+    (3, 'ROLE_MANUFACTURER'),
+    (4, 'ROLE_MANUFACTURER');

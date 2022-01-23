@@ -32,7 +32,6 @@ public class CustomMethodSecurityExpressionRoot extends SecurityExpressionRoot i
 
             // Obtain manufacturer id from beer
             Long beerManufacturerId = beer.getManufacturer().getId();
-            this.isFullyAuthenticated()
             // Obtain manufacturer id from authenticated user
             Provider authenticatedProvider = (Provider) this.authentication.getPrincipal();
             Long authUserManufacturerId = authenticatedProvider.getManufacturer().getId();
