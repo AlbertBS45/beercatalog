@@ -1,6 +1,7 @@
 package com.catalog.beercatalog.security;
 
 import com.catalog.beercatalog.entity.Beer;
+import com.catalog.beercatalog.entity.Manufacturer;
 import com.catalog.beercatalog.entity.Provider;
 
 import org.springframework.security.access.expression.SecurityExpressionRoot;
@@ -17,7 +18,7 @@ public class CustomMethodSecurityExpressionRoot extends SecurityExpressionRoot i
         super(authentication);
     }
 
-    public boolean isItOwnManufacturer(Beer beer) {
+    public boolean isItOwnManufacturer(Object object) {
         
         Boolean isAdmin = this.authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equalsIgnoreCase("ROLE_ADMIN"));
         Boolean isManufacturer = this.authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equalsIgnoreCase("ROLE_MANUFACTURER"));
@@ -30,14 +31,22 @@ public class CustomMethodSecurityExpressionRoot extends SecurityExpressionRoot i
         // Verify if authorized user has role Manufacturer
         if (isManufacturer) {
 
-            // Obtain manufacturer id from beer
-            Long beerManufacturerId = beer.getManufacturer().getId();
+            Long manufacturerId = null;
+            // Obtain manufacturer id from beer or manufacturer
+            if (object instanceof Beer) {
+                Beer beer = (Beer) object;
+                manufacturerId = beer.getManufacturer().getId();
+            } else {
+                Manufacturer manufacturer = (Manufacturer) object;
+                manufacturerId = manufacturer.getId();
+            }
+
             // Obtain manufacturer id from authenticated user
             Provider authenticatedProvider = (Provider) this.authentication.getPrincipal();
             Long authUserManufacturerId = authenticatedProvider.getManufacturer().getId();
 
             //Proceed to check if is it own beer manufacturer
-            if (beerManufacturerId != null && beerManufacturerId == authUserManufacturerId) {
+            if (manufacturerId != null && manufacturerId == authUserManufacturerId) {
                 return true;
             }
         }
