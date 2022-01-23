@@ -2,6 +2,7 @@ package com.catalog.beercatalog.entity;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -20,11 +21,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 
-// Our custom user table named providers
+// Our custom user table
 @Entity
 @NamedEntityGraphs({
     @NamedEntityGraph(name="Provider.related", attributeNodes={
-        @NamedAttributeNode("manufacturer"),
         @NamedAttributeNode("authorities"),
     })
 })
@@ -43,33 +43,26 @@ public class Provider {
     @Column(nullable = false)
     private String pwd;
 
-    @Column(nullable = false)
-    private String role;
-
     @OneToOne()
     @JoinColumn(name = "manufacturer_id")
     private Manufacturer manufacturer;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "provider")
+    @OneToMany(mappedBy = "provider", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Authority> authorities;
 
     public Provider(){}
 
-    public Provider(String email, String pwd, String role, Manufacturer manufacturer, List<Authority> authorities) {
+    public Provider(String email, String pwd, Manufacturer manufacturer, List<Authority> authorities) {
         this.email = email;
         this.pwd = pwd;
-        this.role = role;
         this.manufacturer = manufacturer;
         this.authorities = authorities;
     }
 
     @Override
     public String toString() {
-        return "Provider [email=" + email + ", id=" + id + ", pwd=" + pwd + ", role=" + role + "]";
+        return "Provider [email=" + email + ", id=" + id + ", manufacturer=" + manufacturer + "]";
     }
-
-    
-
     
 }
