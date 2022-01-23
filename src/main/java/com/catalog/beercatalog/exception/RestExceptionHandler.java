@@ -25,6 +25,17 @@ public class RestExceptionHandler {
     }
 
     @ExceptionHandler
+    public ResponseEntity<RestResponse> handleException(MissingRequiredsException exception) {
+
+        RestResponse response = new RestResponse();
+        response.setStatus(HttpStatus.UNPROCESSABLE_ENTITY.value());
+        response.setMessage(exception.getMessage());
+        response.setCurrentTimeStamp(DateFormatUtil.getFormattedDate(new Date()));
+
+        return new ResponseEntity<>(response, HttpStatus.UNPROCESSABLE_ENTITY);
+    }
+
+    @ExceptionHandler
     public ResponseEntity<RestResponse> handleException(Exception exception) {
 
         RestResponse response = new RestResponse();
