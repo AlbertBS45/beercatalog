@@ -10,4 +10,6 @@ public interface ProviderRepository extends JpaRepository<Provider, Long>{
     
     @EntityGraph(value = "Provider.related", type = EntityGraphType.LOAD)
     Provider findByEmail(String email);
+
+    void deleteByManufacturer_Id(Long id);
 }
