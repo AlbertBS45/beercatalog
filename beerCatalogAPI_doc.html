@@ -1,0 +1,3562 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Beer Catalog API</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/monokai-sublime.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+    <script>
+        hljs.configure({
+            tabReplace: '    ',
+        });
+        hljs.initHighlightingOnLoad();
+    </script>
+    <style>body {
+    position: relative;
+}
+
+h1 {
+    margin-top: 5px;
+}
+
+h1, h2, h3, h4 {
+    color: #2b2b2b;
+}
+
+h2:after {
+    content: ' ';
+}
+
+h5 {
+    font-weight: bold;
+}
+
+h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {
+    display: none;
+    position: absolute;
+    margin-left: 8px;
+}
+
+h1:hover a, h2:hover a, h3:hover a, h4:hover a, h5:hover a, h6:hover a {
+    color: #a5a5a5;
+    display: initial;
+}
+
+.nav.nav-tabs > li > a {
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+.tab-content {
+    padding-top: 8px;
+}
+
+.table {
+    margin-bottom: 8px;
+}
+
+pre {
+    border-radius: 0px;
+    border: none;
+}
+
+pre code {
+    margin: -9.5px;
+}
+
+.request {
+    margin-top: 12px;
+    margin-bottom: 24px;
+}
+
+.response-text-sample {
+    padding: 0px !important;
+}
+
+.response-text-sample pre {
+    margin-bottom: 0px;
+}
+
+
+#sidebar-wrapper {
+    z-index: 1000;
+    position: fixed;
+    left: 250px;
+    width: 250px;
+    height: 100%;
+    margin-left: -250px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background: #2b2b2b;
+    padding-top: 20px;
+}
+
+#sidebar-wrapper ul {
+    width: 250px;
+}
+
+#sidebar-wrapper ul li {
+    margin-right: 10px;
+}
+
+#sidebar-wrapper ul li a:hover {
+    background: inherit;
+    text-decoration: none;
+}
+
+#sidebar-wrapper ul li a {
+    display: block;
+    color: #ECF0F1;
+    padding: 6px 15px;
+}
+
+#sidebar-wrapper ul li ul {
+    padding-left: 25px;
+}
+
+#sidebar-wrapper ul li ul li a {
+    padding: 1px 0px;
+}
+
+#sidebar-wrapper ul li a:hover,
+#sidebar-wrapper ul li a:focus {
+    color: #e0c46c;
+    border-right: solid 1px #e0c46c;
+}
+
+#sidebar-wrapper ul li.active > a {
+    color: #e0c46c;
+    border-right: solid 3px #e0c46c;
+}
+
+#sidebar-wrapper ul li:not(.active) ul {
+    display: none;
+}
+
+#page-content-wrapper {
+    width: 100%;
+    position: absolute;
+    padding: 15px 15px 15px 250px;
+}
+</style>
+</head>
+<body data-spy="scroll" data-target=".scrollspy">
+<div id="sidebar-wrapper">
+    <div class="scrollspy">
+    <ul id="main-menu" data-spy="affix" class="nav">
+        <li>
+            <a href="#doc-general-notes">General notes</a>
+        </li>
+        
+        <li>
+            <a href="#doc-api-detail">API detail</a>
+        </li>
+        
+        
+        
+        <li>
+            <a href="#folder-beers">Beers</a>
+            <ul>
+                
+                <li>
+                    <a href="#request-beers-get-all-beers">Get all beers</a>
+                </li>
+                
+                <li>
+                    <a href="#request-beers-get-all-beers-with-pagination-and-sorting">Get all beers with pagination and sorting</a>
+                </li>
+                
+                <li>
+                    <a href="#request-beers-get-beers-by-name">Get beers by name</a>
+                </li>
+                
+                <li>
+                    <a href="#request-beers-get-beers-by-type">Get beers by type</a>
+                </li>
+                
+                <li>
+                    <a href="#request-beers-get-beers-by-description">Get beers by description</a>
+                </li>
+                
+                <li>
+                    <a href="#request-beers-get-beers-by-abv-greather-than">Get beers by abv greather than</a>
+                </li>
+                
+                <li>
+                    <a href="#request-beers-get-beers-by-abv-less-than">Get beers by abv less than</a>
+                </li>
+                
+                <li>
+                    <a href="#request-beers-get-beers-by-manufacturer-id">Get beers by manufacturer id</a>
+                </li>
+                
+                <li>
+                    <a href="#request-beers-get-beers-by-manufacturer-name">Get beers by manufacturer name</a>
+                </li>
+                
+                <li>
+                    <a href="#request-beers-get-beers-by-manufacturer-nationality">Get beers by manufacturer nationality</a>
+                </li>
+                
+                <li>
+                    <a href="#request-beers-get-one-beer-by-id">Get one beer by id</a>
+                </li>
+                
+                <li>
+                    <a href="#request-beers-create-a-beer">Create a beer</a>
+                </li>
+                
+                <li>
+                    <a href="#request-beers-update-a-beer">Update a beer</a>
+                </li>
+                
+                <li>
+                    <a href="#request-beers-delete-a-beer">Delete a beer</a>
+                </li>
+                
+            </ul>
+        </li>
+        
+        
+        <li>
+            <a href="#folder-manufacturers">Manufacturers</a>
+            <ul>
+                
+                <li>
+                    <a href="#request-manufacturers-get-all-manufacturers">Get all manufacturers</a>
+                </li>
+                
+                <li>
+                    <a href="#request-manufacturers-get-all-manufacturers-with-pagination-and-sorting">Get all manufacturers with pagination and sorting</a>
+                </li>
+                
+                <li>
+                    <a href="#request-manufacturers-get-manufacturers-by-name">Get manufacturers by name</a>
+                </li>
+                
+                <li>
+                    <a href="#request-manufacturers-get-manufacturers-by-nationality">Get  manufacturers by nationality</a>
+                </li>
+                
+                <li>
+                    <a href="#request-manufacturers-get-one-manufacturer-by-id">Get one manufacturer by id</a>
+                </li>
+                
+                <li>
+                    <a href="#request-manufacturers-create-a-new-manufacturer">Create a new manufacturer</a>
+                </li>
+                
+                <li>
+                    <a href="#request-manufacturers-update-a-manufacturer">Update a manufacturer</a>
+                </li>
+                
+                <li>
+                    <a href="#request-manufacturers-delete-a-manufacturer">Delete a manufacturer</a>
+                </li>
+                
+            </ul>
+        </li>
+        
+    </ul>
+</div>
+
+</div>
+<div id="page-content-wrapper">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1>Beer Catalog API</h1>
+
+                <h2 id="doc-general-notes">
+                    General notes
+                    <a href="#doc-general-notes"><i class="glyphicon glyphicon-link"></i></a>
+                </h2>
+
+                <p>This API manages a beer catalogue from different manufacturers.</p>
+
+<p>Beer consumers can look up the beer catalogue in order to inspire future purchases.</p>
+
+
+                
+
+                <h2 id="doc-api-detail">
+                    API detail
+                    <a href="#doc-api-detail"><i class="glyphicon glyphicon-link"></i></a>
+                </h2>
+
+                
+
+
+                
+                
+                <div class="endpoints-group">
+                    <h3 id="folder-beers">
+                        Beers
+                        <a href="#folder-beers"><i class="glyphicon glyphicon-link"></i></a>
+                    </h3>
+
+                    <div><p>The operations available are:</p>
+
+<ul>
+<li>Obtain information by any beer attribute</li>
+<li>Add a new beer</li>
+<li>Update an existing beer</li>
+<li>Delete a beer</li>
+</ul>
+</div>
+
+                    
+                    
+                    <div class="request">
+
+                        <h4 id="request-beers-get-all-beers">
+                            Get all beers
+                            <a href="#request-beers-get-all-beers"><i class="glyphicon glyphicon-link"></i></a>
+                        </h4>
+
+                        <div><p>Get all beers from the catalog.</p>
+
+<p>By default, page size is 10 elements and results are sorted by id in ascending order.</p>
+
+<p>This request can be performed without any authentication.</p>
+</div>
+
+                        <div>
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li role="presentation" class="active"><a href="#request-beers-get-all-beers-example-curl" data-toggle="tab">Curl</a></li>
+                                <li role="presentation"><a href="#request-beers-get-all-beers-example-http" data-toggle="tab">HTTP</a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="request-beers-get-all-beers-example-curl">
+                                    <pre><code class="hljs curl">curl -X GET "http://localhost:8080/beercatalog/beers"</code></pre>
+                                </div>
+                                <div class="tab-pane" id="request-beers-get-all-beers-example-http">
+                                    <pre><code class="hljs http">GET /beercatalog/beers HTTP/1.1
+Host: localhost:8080</code></pre>
+                                </div>
+                            </div>
+                        </div>
+
+                        
+                        <div>
+                            <ul class="nav nav-tabs" role="tablist">
+                                
+                                <li role="presentation" class="active">
+                                    <a href="#request-beers-get-all-beers-responses-5e75cee0-30d4-4114-b5cb-fbb742fee95f" data-toggle="tab">
+                                        
+                                            OK
+                                        
+                                    </a>
+                                </li>
+                                
+                                <li role="presentation">
+                                    <a href="#request-beers-get-all-beers-responses-a84c9df5-d9cb-46e4-95ab-215a7a255545" data-toggle="tab">
+                                        
+                                            NO CONTENT
+                                        
+                                    </a>
+                                </li>
+                                
+                            </ul>
+                            <div class="tab-content">
+                                
+                                <div class="tab-pane active" id="request-beers-get-all-beers-responses-5e75cee0-30d4-4114-b5cb-fbb742fee95f">
+                                    <table class="table table-bordered">
+                                        <tr><th style="width: 20%;">Status</th><td>200 OK</td></tr>
+                                        
+                                        <tr><th style="width: 20%;">Content-Type</th><td>application/json</td></tr>
+                                        
+                                        
+                                            
+                                            <tr><td class="response-text-sample" colspan="2">
+                                                <pre><code>{
+    "currentPage": 1,
+    "totalPages": 2,
+    "pageSize": 10,
+    "totalItems": 14,
+    "beers": [
+        {
+            "id": 1,
+            "name": "Budweiser",
+            "type": "American Lager",
+            "description": "Brewed using a blend of imported and classic American aroma hops, and a blend of barley malts and rice. Budweiser is brewed with time-honored methods including “kraeusening” for natural carbonation and Beechwood aging, which results in unparalleled balance and character.",
+            "abv": 5.0,
+            "manufacturer": {
+                "id": 1,
+                "name": "Anheuser-Busch",
+                "nationality": "United States"
+            }
+        },
+        {
+            "id": 3,
+            "name": "Sunshine Pils",
+            "type": "German Pilsner",
+            "description": "Like the rising sun, Sunshine Pils delivers winter, spring, summer and fall. This deceptive complex pilsner is all about the tightrope walk of two-row barley, zesty Saaz hops and lager yeast. It's a go-to when the sun is shining, and it makes us happy when skies are gray.",
+            "abv": 4.5,
+            "manufacturer": {
+                "id": 3,
+                "name": "Tröegs Brewing Company",
+                "nationality": "United States"
+            }
+        },
+        {
+            "id": 4,
+            "name": "Lagunitas PILS",
+            "type": "Czech Pilsner",
+            "description": "Our only Lager, brewed with loads of imported Saaz hops and a bottom-fermenting yeast strain that leaves it Light and Crisp and Easy to Slam, yet full of real flavor and all the things you yearn for.",
+            "abv": 6.2,
+            "manufacturer": {
+                "id": 4,
+                "name": "Lagunitas Brewing Company",
+                "nationality": "United States"
+            }
+        },
+        {
+            "id": 5,
+            "name": "Yuengling Lager",
+            "type": "Amber American Lager",
+            "description": "Famous for its rich amber color and medium-bodied flavor with roasted caramel malt for a subtle sweetness and a combination of Cluster and Cascade hops, this true original delivers a well-balanced taste with very distinct character.",
+            "abv": 4.5,
+            "manufacturer": {
+                "id": 5,
+                "name": "Yuengling Brewery",
+                "nationality": "United States"
+            }
+        },
+        {
+            "id": 7,
+            "name": "Shiner Bohemian Black Lager",
+            "type": "German Schwarzbier",
+            "description": "Germans call it a schwarzbier (black beer), but Shiner fans know this one as Shiner 97. Unusually smooth for a dark beer, our Bohemian black lager is brewed with roasted malts and Czech Saaz and Styrian hops. All else pales in comparison.",
+            "abv": 4.9,
+            "manufacturer": {
+                "id": 7,
+                "name": "Spoetzl Brewery",
+                "nationality": "United States"
+            }
+        },
+        {
+            "id": 8,
+            "name": "Dos Equis Ambar",
+            "type": "Vienna Lager",
+            "description": "Dos Equis Ambar (Amber) is a vienna style lager that was originally brewed by the German-born Mexican brewer Wilhelm Hasse in 1897.",
+            "abv": 4.7,
+            "manufacturer": {
+                "id": 8,
+                "name": "Cervecería Cuauhtémoc Moctezuma",
+                "nationality": "Mexico"
+            }
+        },
+        {
+            "id": 9,
+            "name": "Samuel Adams Winter Lager",
+            "type": "Traditional Bock",
+            "description": "For the first time in 31 years, we’re updating the classic Winter Lager recipe to make it crisper and brighter. It’s the same iconic beer, with a wintery remix. Crisp Bock with citrus and spices, lager brewed with orange peel, cinnamon, and ginger.",
+            "abv": 5.6,
+            "manufacturer": {
+                "id": 9,
+                "name": "Boston Beer Company",
+                "nationality": "United States"
+            }
+        },
+        {
+            "id": 10,
+            "name": "Troegenator",
+            "type": "Doppelbock",
+            "description": "Monks had fasting figured out. No food? No problem. Just drink a Double Bock. Thick and chewy with intense notes of caramel, chocolate and dried stone fruit, ‘Nator (as we call him) serves as a tribute to this liquid bread style.",
+            "abv": 8.2,
+            "manufacturer": {
+                "id": 3,
+                "name": "Tröegs Brewing Company",
+                "nationality": "United States"
+            }
+        },
+        {
+            "id": 12,
+            "name": "Capital Maibock",
+            "type": "Maibock",
+            "description": "Our spring seasonal is a deep golden lager with a flavorful but smooth presence. When you see our Maibock hit the shelves you know things are about to get better… including the weather!",
+            "abv": 6.2,
+            "manufacturer": {
+                "id": 10,
+                "name": "Capital Brewery",
+                "nationality": "United States"
+            }
+        },
+        {
+            "id": 13,
+            "name": "Brooklyn Brown Ale",
+            "type": "American Brown Ale",
+            "description": "This is the award-winning original American brown ale, first brewed as a holiday specialty, and now one of our most popular beers year-round. Northern English brown ales tend to be strong and dry, while southern English brown ales are milder and sweeter.",
+            "abv": 5.6,
+            "manufacturer": {
+                "id": 11,
+                "name": "Brooklyn Brewery",
+                "nationality": "United States"
+            }
+        }
+    ]
+}</code></pre>
+                                            </td></tr>
+                                            
+                                        
+                                    </table>
+                                </div>
+                                
+                                <div class="tab-pane" id="request-beers-get-all-beers-responses-a84c9df5-d9cb-46e4-95ab-215a7a255545">
+                                    <table class="table table-bordered">
+                                        <tr><th style="width: 20%;">Status</th><td>204 No Content</td></tr>
+                                        
+                                        
+                                    </table>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        
+
+                        <hr>
+                    </div>
+                    
+                    
+                    <div class="request">
+
+                        <h4 id="request-beers-get-all-beers-with-pagination-and-sorting">
+                            Get all beers with pagination and sorting
+                            <a href="#request-beers-get-all-beers-with-pagination-and-sorting"><i class="glyphicon glyphicon-link"></i></a>
+                        </h4>
+
+                        <div><p>Get beers from the catalog specifing page size, page number and sorting by a field with an specific order.</p>
+
+<p>If none of these parameters are specified, by default, page size is 10 elements and results are sorted by id in ascending order.</p>
+
+<p>This request can be performed without any authentication.</p>
+</div>
+
+                        <div>
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li role="presentation" class="active"><a href="#request-beers-get-all-beers-with-pagination-and-sorting-example-curl" data-toggle="tab">Curl</a></li>
+                                <li role="presentation"><a href="#request-beers-get-all-beers-with-pagination-and-sorting-example-http" data-toggle="tab">HTTP</a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="request-beers-get-all-beers-with-pagination-and-sorting-example-curl">
+                                    <pre><code class="hljs curl">curl -X GET "http://localhost:8080/beercatalog/beers?pageSize=15&pageNum=2&sort=abv,desc"</code></pre>
+                                </div>
+                                <div class="tab-pane" id="request-beers-get-all-beers-with-pagination-and-sorting-example-http">
+                                    <pre><code class="hljs http">GET /beercatalog/beers?pageSize=15&pageNum=2&sort=abv,desc HTTP/1.1
+Host: localhost:8080</code></pre>
+                                </div>
+                            </div>
+                        </div>
+
+                        
+                        <div>
+                            <ul class="nav nav-tabs" role="tablist">
+                                
+                                <li role="presentation" class="active">
+                                    <a href="#request-beers-get-all-beers-with-pagination-and-sorting-responses-478dda61-fa8b-4167-b67c-ea0b83c079f1" data-toggle="tab">
+                                        
+                                            OK
+                                        
+                                    </a>
+                                </li>
+                                
+                                <li role="presentation">
+                                    <a href="#request-beers-get-all-beers-with-pagination-and-sorting-responses-084cf7f6-091c-40e2-8f91-57a82ee55106" data-toggle="tab">
+                                        
+                                            NO CONTENT
+                                        
+                                    </a>
+                                </li>
+                                
+                            </ul>
+                            <div class="tab-content">
+                                
+                                <div class="tab-pane active" id="request-beers-get-all-beers-with-pagination-and-sorting-responses-478dda61-fa8b-4167-b67c-ea0b83c079f1">
+                                    <table class="table table-bordered">
+                                        <tr><th style="width: 20%;">Status</th><td>200 OK</td></tr>
+                                        
+                                        <tr><th style="width: 20%;">Content-Type</th><td>application/json</td></tr>
+                                        
+                                        
+                                            
+                                            <tr><td class="response-text-sample" colspan="2">
+                                                <pre><code>{
+    "currentPage": 2,
+    "totalPages": 2,
+    "pageSize": 15,
+    "totalItems": 17,
+    "beers": [
+        {
+            "id": 16,
+            "name": "Black Sheep Ale",
+            "type": "English Pale Ale",
+            "description": "Black Sheep Ale is a full flavoured premium bitter with a rich, fruity aroma. Brewed using generous handfuls of choice Golding hops, it has a perfectly balanced bittersweet, malty taste with a long, dry and bitter finish.",
+            "abv": 4.4,
+            "manufacturer": {
+                "id": 14,
+                "name": "Black Sheep Brewery",
+                "nationality": "United Kingdom"
+            }
+        },
+        {
+            "id": 15,
+            "name": "Doom Bar",
+            "type": "English Bitter",
+            "description": "Doom Bar is inspired by its namesake, the treacherous sandbank at the mouth of the Camel Estuary near Sharps home at Rock. Accomplished and precise, Doom Bar is the epitomy of consistency, balance and moreish appeal and is now the UK's no.1 selling cask beer.",
+            "abv": 4.3,
+            "manufacturer": {
+                "id": 13,
+                "name": "Sharp's Brewery",
+                "nationality": "United Kingdom"
+            }
+        }
+    ]
+}</code></pre>
+                                            </td></tr>
+                                            
+                                        
+                                    </table>
+                                </div>
+                                
+                                <div class="tab-pane" id="request-beers-get-all-beers-with-pagination-and-sorting-responses-084cf7f6-091c-40e2-8f91-57a82ee55106">
+                                    <table class="table table-bordered">
+                                        <tr><th style="width: 20%;">Status</th><td>204 No Content</td></tr>
+                                        
+                                        
+                                    </table>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        
+
+                        <hr>
+                    </div>
+                    
+                    
+                    <div class="request">
+
+                        <h4 id="request-beers-get-beers-by-name">
+                            Get beers by name
+                            <a href="#request-beers-get-beers-by-name"><i class="glyphicon glyphicon-link"></i></a>
+                        </h4>
+
+                        <div><p>Get beers from the catalog by name.</p>
+
+<p>By default, page size is 10 elements and results are sorted by id in ascending order.</p>
+
+<p>This request can be performed without any authentication.</p>
+</div>
+
+                        <div>
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li role="presentation" class="active"><a href="#request-beers-get-beers-by-name-example-curl" data-toggle="tab">Curl</a></li>
+                                <li role="presentation"><a href="#request-beers-get-beers-by-name-example-http" data-toggle="tab">HTTP</a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="request-beers-get-beers-by-name-example-curl">
+                                    <pre><code class="hljs curl">curl -X GET "http://localhost:8080/beercatalog/beers?name=Pils"</code></pre>
+                                </div>
+                                <div class="tab-pane" id="request-beers-get-beers-by-name-example-http">
+                                    <pre><code class="hljs http">GET /beercatalog/beers?name=Pils HTTP/1.1
+Host: localhost:8080</code></pre>
+                                </div>
+                            </div>
+                        </div>
+
+                        
+                        <div>
+                            <ul class="nav nav-tabs" role="tablist">
+                                
+                                <li role="presentation" class="active">
+                                    <a href="#request-beers-get-beers-by-name-responses-c182a4d8-cfe5-444f-b0a7-3bd3978087b4" data-toggle="tab">
+                                        
+                                            OK
+                                        
+                                    </a>
+                                </li>
+                                
+                                <li role="presentation">
+                                    <a href="#request-beers-get-beers-by-name-responses-c07611be-b53d-4c26-b6c6-42b4f060154d" data-toggle="tab">
+                                        
+                                            NO CONTENT
+                                        
+                                    </a>
+                                </li>
+                                
+                            </ul>
+                            <div class="tab-content">
+                                
+                                <div class="tab-pane active" id="request-beers-get-beers-by-name-responses-c182a4d8-cfe5-444f-b0a7-3bd3978087b4">
+                                    <table class="table table-bordered">
+                                        <tr><th style="width: 20%;">Status</th><td>200 OK</td></tr>
+                                        
+                                        <tr><th style="width: 20%;">Content-Type</th><td>application/json</td></tr>
+                                        
+                                        
+                                            
+                                            <tr><td class="response-text-sample" colspan="2">
+                                                <pre><code>{
+    "currentPage": 1,
+    "totalPages": 1,
+    "pageSize": 10,
+    "totalItems": 2,
+    "beers": [
+        {
+            "id": 3,
+            "name": "Sunshine Pils",
+            "type": "German Pilsner",
+            "description": "Like the rising sun, Sunshine Pils delivers winter, spring, summer and fall. This deceptive complex pilsner is all about the tightrope walk of two-row barley, zesty Saaz hops and lager yeast. It's a go-to when the sun is shining, and it makes us happy when skies are gray.",
+            "abv": 4.5,
+            "manufacturer": {
+                "id": 3,
+                "name": "Tröegs Brewing Company",
+                "nationality": "United States"
+            }
+        },
+        {
+            "id": 4,
+            "name": "Lagunitas PILS",
+            "type": "Czech Pilsner",
+            "description": "Our only Lager, brewed with loads of imported Saaz hops and a bottom-fermenting yeast strain that leaves it Light and Crisp and Easy to Slam, yet full of real flavor and all the things you yearn for.",
+            "abv": 6.2,
+            "manufacturer": {
+                "id": 4,
+                "name": "Lagunitas Brewing Company",
+                "nationality": "United States"
+            }
+        }
+    ]
+}</code></pre>
+                                            </td></tr>
+                                            
+                                        
+                                    </table>
+                                </div>
+                                
+                                <div class="tab-pane" id="request-beers-get-beers-by-name-responses-c07611be-b53d-4c26-b6c6-42b4f060154d">
+                                    <table class="table table-bordered">
+                                        <tr><th style="width: 20%;">Status</th><td>204 No Content</td></tr>
+                                        
+                                        
+                                    </table>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        
+
+                        <hr>
+                    </div>
+                    
+                    
+                    <div class="request">
+
+                        <h4 id="request-beers-get-beers-by-type">
+                            Get beers by type
+                            <a href="#request-beers-get-beers-by-type"><i class="glyphicon glyphicon-link"></i></a>
+                        </h4>
+
+                        <div><p>Get beers from the catalog by type.</p>
+
+<p>By default, page size is 10 elements and results are sorted by id in ascending order.</p>
+
+<p>This request can be performed without any authentication.</p>
+</div>
+
+                        <div>
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li role="presentation" class="active"><a href="#request-beers-get-beers-by-type-example-curl" data-toggle="tab">Curl</a></li>
+                                <li role="presentation"><a href="#request-beers-get-beers-by-type-example-http" data-toggle="tab">HTTP</a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="request-beers-get-beers-by-type-example-curl">
+                                    <pre><code class="hljs curl">curl -X GET "http://localhost:8080/beercatalog/beers?type=Lager"</code></pre>
+                                </div>
+                                <div class="tab-pane" id="request-beers-get-beers-by-type-example-http">
+                                    <pre><code class="hljs http">GET /beercatalog/beers?type=Lager HTTP/1.1
+Host: localhost:8080</code></pre>
+                                </div>
+                            </div>
+                        </div>
+
+                        
+                        <div>
+                            <ul class="nav nav-tabs" role="tablist">
+                                
+                                <li role="presentation" class="active">
+                                    <a href="#request-beers-get-beers-by-type-responses-c3e5e97a-6653-4419-9d27-f37ca57a1eb8" data-toggle="tab">
+                                        
+                                            OK
+                                        
+                                    </a>
+                                </li>
+                                
+                                <li role="presentation">
+                                    <a href="#request-beers-get-beers-by-type-responses-4714c6e2-63eb-4647-9b3f-73699d1f86a8" data-toggle="tab">
+                                        
+                                            NO CONTENT
+                                        
+                                    </a>
+                                </li>
+                                
+                            </ul>
+                            <div class="tab-content">
+                                
+                                <div class="tab-pane active" id="request-beers-get-beers-by-type-responses-c3e5e97a-6653-4419-9d27-f37ca57a1eb8">
+                                    <table class="table table-bordered">
+                                        <tr><th style="width: 20%;">Status</th><td>200 OK</td></tr>
+                                        
+                                        <tr><th style="width: 20%;">Content-Type</th><td>application/json</td></tr>
+                                        
+                                        
+                                            
+                                            <tr><td class="response-text-sample" colspan="2">
+                                                <pre><code>{
+    "currentPage": 1,
+    "totalPages": 1,
+    "pageSize": 10,
+    "totalItems": 3,
+    "beers": [
+        {
+            "id": 1,
+            "name": "Budweiser",
+            "type": "American Lager",
+            "description": "Brewed using a blend of imported and classic American aroma hops, and a blend of barley malts and rice. Budweiser is brewed with time-honored methods including “kraeusening” for natural carbonation and Beechwood aging, which results in unparalleled balance and character.",
+            "abv": 5.0,
+            "manufacturer": {
+                "id": 1,
+                "name": "Anheuser-Busch",
+                "nationality": "United States"
+            }
+        },
+        {
+            "id": 5,
+            "name": "Yuengling Lager",
+            "type": "Amber American Lager",
+            "description": "Famous for its rich amber color and medium-bodied flavor with roasted caramel malt for a subtle sweetness and a combination of Cluster and Cascade hops, this true original delivers a well-balanced taste with very distinct character.",
+            "abv": 4.5,
+            "manufacturer": {
+                "id": 5,
+                "name": "Yuengling Brewery",
+                "nationality": "United States"
+            }
+        },
+        {
+            "id": 8,
+            "name": "Dos Equis Ambar",
+            "type": "Vienna Lager",
+            "description": "Dos Equis Ambar (Amber) is a vienna style lager that was originally brewed by the German-born Mexican brewer Wilhelm Hasse in 1897.",
+            "abv": 4.7,
+            "manufacturer": {
+                "id": 8,
+                "name": "Cervecería Cuauhtémoc Moctezuma",
+                "nationality": "Mexico"
+            }
+        }
+    ]
+}</code></pre>
+                                            </td></tr>
+                                            
+                                        
+                                    </table>
+                                </div>
+                                
+                                <div class="tab-pane" id="request-beers-get-beers-by-type-responses-4714c6e2-63eb-4647-9b3f-73699d1f86a8">
+                                    <table class="table table-bordered">
+                                        <tr><th style="width: 20%;">Status</th><td>204 No Content</td></tr>
+                                        
+                                        
+                                    </table>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        
+
+                        <hr>
+                    </div>
+                    
+                    
+                    <div class="request">
+
+                        <h4 id="request-beers-get-beers-by-description">
+                            Get beers by description
+                            <a href="#request-beers-get-beers-by-description"><i class="glyphicon glyphicon-link"></i></a>
+                        </h4>
+
+                        <div><p>Get beers from the catalog by description.</p>
+
+<p>By default, page size is 10 elements and results are sorted by id in ascending order.</p>
+
+<p>This request can be performed without any authentication.</p>
+</div>
+
+                        <div>
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li role="presentation" class="active"><a href="#request-beers-get-beers-by-description-example-curl" data-toggle="tab">Curl</a></li>
+                                <li role="presentation"><a href="#request-beers-get-beers-by-description-example-http" data-toggle="tab">HTTP</a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="request-beers-get-beers-by-description-example-curl">
+                                    <pre><code class="hljs curl">curl -X GET "http://localhost:8080/beercatalog/beers?description=strong"</code></pre>
+                                </div>
+                                <div class="tab-pane" id="request-beers-get-beers-by-description-example-http">
+                                    <pre><code class="hljs http">GET /beercatalog/beers?description=strong HTTP/1.1
+Host: localhost:8080</code></pre>
+                                </div>
+                            </div>
+                        </div>
+
+                        
+                        <div>
+                            <ul class="nav nav-tabs" role="tablist">
+                                
+                                <li role="presentation" class="active">
+                                    <a href="#request-beers-get-beers-by-description-responses-4183cbfd-8dbf-4886-aa67-3081436cdd97" data-toggle="tab">
+                                        
+                                            OK
+                                        
+                                    </a>
+                                </li>
+                                
+                                <li role="presentation">
+                                    <a href="#request-beers-get-beers-by-description-responses-a6d7cc4d-05e9-4419-8c01-e2c0607d790c" data-toggle="tab">
+                                        
+                                            NO CONTENT
+                                        
+                                    </a>
+                                </li>
+                                
+                            </ul>
+                            <div class="tab-content">
+                                
+                                <div class="tab-pane active" id="request-beers-get-beers-by-description-responses-4183cbfd-8dbf-4886-aa67-3081436cdd97">
+                                    <table class="table table-bordered">
+                                        <tr><th style="width: 20%;">Status</th><td>200 OK</td></tr>
+                                        
+                                        <tr><th style="width: 20%;">Content-Type</th><td>application/json</td></tr>
+                                        
+                                        
+                                            
+                                            <tr><td class="response-text-sample" colspan="2">
+                                                <pre><code>{
+    "currentPage": 1,
+    "totalPages": 1,
+    "pageSize": 10,
+    "totalItems": 1,
+    "beers": [
+        {
+            "id": 13,
+            "name": "Brooklyn Brown Ale",
+            "type": "American Brown Ale",
+            "description": "This is the award-winning original American brown ale, first brewed as a holiday specialty, and now one of our most popular beers year-round. Northern English brown ales tend to be strong and dry, while southern English brown ales are milder and sweeter.",
+            "abv": 5.6,
+            "manufacturer": {
+                "id": 11,
+                "name": "Brooklyn Brewery",
+                "nationality": "United States"
+            }
+        }
+    ]
+}</code></pre>
+                                            </td></tr>
+                                            
+                                        
+                                    </table>
+                                </div>
+                                
+                                <div class="tab-pane" id="request-beers-get-beers-by-description-responses-a6d7cc4d-05e9-4419-8c01-e2c0607d790c">
+                                    <table class="table table-bordered">
+                                        <tr><th style="width: 20%;">Status</th><td>204 No Content</td></tr>
+                                        
+                                        
+                                    </table>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        
+
+                        <hr>
+                    </div>
+                    
+                    
+                    <div class="request">
+
+                        <h4 id="request-beers-get-beers-by-abv-greather-than">
+                            Get beers by abv greather than
+                            <a href="#request-beers-get-beers-by-abv-greather-than"><i class="glyphicon glyphicon-link"></i></a>
+                        </h4>
+
+                        <div><p>Get beers from the catalog that have an alcohol by volume greather or equals than the specified value.</p>
+
+<p>By default, page size is 10 elements and results are sorted by id in ascending order.</p>
+
+<p>This request can be performed without any authentication.</p>
+</div>
+
+                        <div>
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li role="presentation" class="active"><a href="#request-beers-get-beers-by-abv-greather-than-example-curl" data-toggle="tab">Curl</a></li>
+                                <li role="presentation"><a href="#request-beers-get-beers-by-abv-greather-than-example-http" data-toggle="tab">HTTP</a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="request-beers-get-beers-by-abv-greather-than-example-curl">
+                                    <pre><code class="hljs curl">curl -X GET "http://localhost:8080/beercatalog/beers?abv_gt=8.0"</code></pre>
+                                </div>
+                                <div class="tab-pane" id="request-beers-get-beers-by-abv-greather-than-example-http">
+                                    <pre><code class="hljs http">GET /beercatalog/beers?abv_gt=8.0 HTTP/1.1
+Host: localhost:8080</code></pre>
+                                </div>
+                            </div>
+                        </div>
+
+                        
+                        <div>
+                            <ul class="nav nav-tabs" role="tablist">
+                                
+                                <li role="presentation" class="active">
+                                    <a href="#request-beers-get-beers-by-abv-greather-than-responses-c7f13365-1dfc-401e-ae2a-6fe8d6e58f74" data-toggle="tab">
+                                        
+                                            OK
+                                        
+                                    </a>
+                                </li>
+                                
+                                <li role="presentation">
+                                    <a href="#request-beers-get-beers-by-abv-greather-than-responses-d461de98-0605-4b62-8945-777fe56d9986" data-toggle="tab">
+                                        
+                                            NO CONTENT
+                                        
+                                    </a>
+                                </li>
+                                
+                            </ul>
+                            <div class="tab-content">
+                                
+                                <div class="tab-pane active" id="request-beers-get-beers-by-abv-greather-than-responses-c7f13365-1dfc-401e-ae2a-6fe8d6e58f74">
+                                    <table class="table table-bordered">
+                                        <tr><th style="width: 20%;">Status</th><td>200 OK</td></tr>
+                                        
+                                        <tr><th style="width: 20%;">Content-Type</th><td>application/json</td></tr>
+                                        
+                                        
+                                            
+                                            <tr><td class="response-text-sample" colspan="2">
+                                                <pre><code>{
+    "currentPage": 1,
+    "totalPages": 1,
+    "pageSize": 10,
+    "totalItems": 1,
+    "beers": [
+        {
+            "id": 10,
+            "name": "Troegenator",
+            "type": "Doppelbock",
+            "description": "Monks had fasting figured out. No food? No problem. Just drink a Double Bock. Thick and chewy with intense notes of caramel, chocolate and dried stone fruit, ‘Nator (as we call him) serves as a tribute to this liquid bread style.",
+            "abv": 8.2,
+            "manufacturer": {
+                "id": 3,
+                "name": "Tröegs Brewing Company",
+                "nationality": "United States"
+            }
+        }
+    ]
+}</code></pre>
+                                            </td></tr>
+                                            
+                                        
+                                    </table>
+                                </div>
+                                
+                                <div class="tab-pane" id="request-beers-get-beers-by-abv-greather-than-responses-d461de98-0605-4b62-8945-777fe56d9986">
+                                    <table class="table table-bordered">
+                                        <tr><th style="width: 20%;">Status</th><td>204 No Content</td></tr>
+                                        
+                                        
+                                    </table>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        
+
+                        <hr>
+                    </div>
+                    
+                    
+                    <div class="request">
+
+                        <h4 id="request-beers-get-beers-by-abv-less-than">
+                            Get beers by abv less than
+                            <a href="#request-beers-get-beers-by-abv-less-than"><i class="glyphicon glyphicon-link"></i></a>
+                        </h4>
+
+                        <div><p>Get beers from the catalog that have an alcohol by volume less or equals than the specified value.</p>
+
+<p>By default, page size is 10 elements and results are sorted by id in ascending order.</p>
+
+<p>This request can be performed without any authentication.</p>
+</div>
+
+                        <div>
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li role="presentation" class="active"><a href="#request-beers-get-beers-by-abv-less-than-example-curl" data-toggle="tab">Curl</a></li>
+                                <li role="presentation"><a href="#request-beers-get-beers-by-abv-less-than-example-http" data-toggle="tab">HTTP</a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="request-beers-get-beers-by-abv-less-than-example-curl">
+                                    <pre><code class="hljs curl">curl -X GET "http://localhost:8080/beercatalog/beers?abv_lt=4.4"</code></pre>
+                                </div>
+                                <div class="tab-pane" id="request-beers-get-beers-by-abv-less-than-example-http">
+                                    <pre><code class="hljs http">GET /beercatalog/beers?abv_lt=4.4 HTTP/1.1
+Host: localhost:8080</code></pre>
+                                </div>
+                            </div>
+                        </div>
+
+                        
+                        <div>
+                            <ul class="nav nav-tabs" role="tablist">
+                                
+                                <li role="presentation" class="active">
+                                    <a href="#request-beers-get-beers-by-abv-less-than-responses-c4e3005b-b309-428d-a43a-3c46b87f593c" data-toggle="tab">
+                                        
+                                            OK
+                                        
+                                    </a>
+                                </li>
+                                
+                                <li role="presentation">
+                                    <a href="#request-beers-get-beers-by-abv-less-than-responses-f10df153-d0bf-4029-a6b7-c62860f28e5c" data-toggle="tab">
+                                        
+                                            NO CONTENT
+                                        
+                                    </a>
+                                </li>
+                                
+                            </ul>
+                            <div class="tab-content">
+                                
+                                <div class="tab-pane active" id="request-beers-get-beers-by-abv-less-than-responses-c4e3005b-b309-428d-a43a-3c46b87f593c">
+                                    <table class="table table-bordered">
+                                        <tr><th style="width: 20%;">Status</th><td>200 OK</td></tr>
+                                        
+                                        <tr><th style="width: 20%;">Content-Type</th><td>application/json</td></tr>
+                                        
+                                        
+                                            
+                                            <tr><td class="response-text-sample" colspan="2">
+                                                <pre><code>{
+    "currentPage": 1,
+    "totalPages": 1,
+    "pageSize": 10,
+    "totalItems": 2,
+    "beers": [
+        {
+            "id": 15,
+            "name": "Doom Bar",
+            "type": "English Bitter",
+            "description": "Doom Bar is inspired by its namesake, the treacherous sandbank at the mouth of the Camel Estuary near Sharps home at Rock. Accomplished and precise, Doom Bar is the epitomy of consistency, balance and moreish appeal and is now the UK's no.1 selling cask beer.",
+            "abv": 4.3,
+            "manufacturer": {
+                "id": 13,
+                "name": "Sharp's Brewery",
+                "nationality": "United Kingdom"
+            }
+        },
+        {
+            "id": 16,
+            "name": "Black Sheep Ale",
+            "type": "English Pale Ale",
+            "description": "Black Sheep Ale is a full flavoured premium bitter with a rich, fruity aroma. Brewed using generous handfuls of choice Golding hops, it has a perfectly balanced bittersweet, malty taste with a long, dry and bitter finish.",
+            "abv": 4.4,
+            "manufacturer": {
+                "id": 14,
+                "name": "Black Sheep Brewery",
+                "nationality": "United Kingdom"
+            }
+        }
+    ]
+}</code></pre>
+                                            </td></tr>
+                                            
+                                        
+                                    </table>
+                                </div>
+                                
+                                <div class="tab-pane" id="request-beers-get-beers-by-abv-less-than-responses-f10df153-d0bf-4029-a6b7-c62860f28e5c">
+                                    <table class="table table-bordered">
+                                        <tr><th style="width: 20%;">Status</th><td>0 NO CONTENT</td></tr>
+                                        
+                                        
+                                    </table>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        
+
+                        <hr>
+                    </div>
+                    
+                    
+                    <div class="request">
+
+                        <h4 id="request-beers-get-beers-by-manufacturer-id">
+                            Get beers by manufacturer id
+                            <a href="#request-beers-get-beers-by-manufacturer-id"><i class="glyphicon glyphicon-link"></i></a>
+                        </h4>
+
+                        <div><p>Get beers from the catalog by manufacturer id.</p>
+
+<p>By default, page size is 10 elements and results are sorted by id in ascending order.</p>
+
+<p>This request can be performed without any authentication.</p>
+</div>
+
+                        <div>
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li role="presentation" class="active"><a href="#request-beers-get-beers-by-manufacturer-id-example-curl" data-toggle="tab">Curl</a></li>
+                                <li role="presentation"><a href="#request-beers-get-beers-by-manufacturer-id-example-http" data-toggle="tab">HTTP</a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="request-beers-get-beers-by-manufacturer-id-example-curl">
+                                    <pre><code class="hljs curl">curl -X GET "http://localhost:8080/beercatalog/beers?manufacturer_id=3"</code></pre>
+                                </div>
+                                <div class="tab-pane" id="request-beers-get-beers-by-manufacturer-id-example-http">
+                                    <pre><code class="hljs http">GET /beercatalog/beers?manufacturer_id=3 HTTP/1.1
+Host: localhost:8080</code></pre>
+                                </div>
+                            </div>
+                        </div>
+
+                        
+                        <div>
+                            <ul class="nav nav-tabs" role="tablist">
+                                
+                                <li role="presentation" class="active">
+                                    <a href="#request-beers-get-beers-by-manufacturer-id-responses-8a2ef912-e540-46fc-8d88-7d74ec86617f" data-toggle="tab">
+                                        
+                                            OK
+                                        
+                                    </a>
+                                </li>
+                                
+                                <li role="presentation">
+                                    <a href="#request-beers-get-beers-by-manufacturer-id-responses-a1da3676-e3b6-4829-a2a7-571384512615" data-toggle="tab">
+                                        
+                                            NO CONTENT
+                                        
+                                    </a>
+                                </li>
+                                
+                            </ul>
+                            <div class="tab-content">
+                                
+                                <div class="tab-pane active" id="request-beers-get-beers-by-manufacturer-id-responses-8a2ef912-e540-46fc-8d88-7d74ec86617f">
+                                    <table class="table table-bordered">
+                                        <tr><th style="width: 20%;">Status</th><td>200 OK</td></tr>
+                                        
+                                        <tr><th style="width: 20%;">Content-Type</th><td>application/json</td></tr>
+                                        
+                                        
+                                            
+                                            <tr><td class="response-text-sample" colspan="2">
+                                                <pre><code>{
+    "currentPage": 1,
+    "totalPages": 1,
+    "pageSize": 10,
+    "totalItems": 2,
+    "beers": [
+        {
+            "id": 3,
+            "name": "Sunshine Pils",
+            "type": "German Pilsner",
+            "description": "Like the rising sun, Sunshine Pils delivers winter, spring, summer and fall. This deceptive complex pilsner is all about the tightrope walk of two-row barley, zesty Saaz hops and lager yeast. It's a go-to when the sun is shining, and it makes us happy when skies are gray.",
+            "abv": 4.5,
+            "manufacturer": {
+                "id": 3,
+                "name": "Tröegs Brewing Company",
+                "nationality": "United States"
+            }
+        },
+        {
+            "id": 10,
+            "name": "Troegenator",
+            "type": "Doppelbock",
+            "description": "Monks had fasting figured out. No food? No problem. Just drink a Double Bock. Thick and chewy with intense notes of caramel, chocolate and dried stone fruit, ‘Nator (as we call him) serves as a tribute to this liquid bread style.",
+            "abv": 8.2,
+            "manufacturer": {
+                "id": 3,
+                "name": "Tröegs Brewing Company",
+                "nationality": "United States"
+            }
+        }
+    ]
+}</code></pre>
+                                            </td></tr>
+                                            
+                                        
+                                    </table>
+                                </div>
+                                
+                                <div class="tab-pane" id="request-beers-get-beers-by-manufacturer-id-responses-a1da3676-e3b6-4829-a2a7-571384512615">
+                                    <table class="table table-bordered">
+                                        <tr><th style="width: 20%;">Status</th><td>0 NO CONTENT</td></tr>
+                                        
+                                        
+                                    </table>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        
+
+                        <hr>
+                    </div>
+                    
+                    
+                    <div class="request">
+
+                        <h4 id="request-beers-get-beers-by-manufacturer-name">
+                            Get beers by manufacturer name
+                            <a href="#request-beers-get-beers-by-manufacturer-name"><i class="glyphicon glyphicon-link"></i></a>
+                        </h4>
+
+                        <div><p>Get beers from the catalog by manufacturer name.</p>
+
+<p>By default, page size is 10 elements and results are sorted by id in ascending order.</p>
+
+<p>This request can be performed without any authentication.</p>
+</div>
+
+                        <div>
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li role="presentation" class="active"><a href="#request-beers-get-beers-by-manufacturer-name-example-curl" data-toggle="tab">Curl</a></li>
+                                <li role="presentation"><a href="#request-beers-get-beers-by-manufacturer-name-example-http" data-toggle="tab">HTTP</a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="request-beers-get-beers-by-manufacturer-name-example-curl">
+                                    <pre><code class="hljs curl">curl -X GET "http://localhost:8080/beercatalog/beers?manufacturer_name=Paulaner"</code></pre>
+                                </div>
+                                <div class="tab-pane" id="request-beers-get-beers-by-manufacturer-name-example-http">
+                                    <pre><code class="hljs http">GET /beercatalog/beers?manufacturer_name=Paulaner HTTP/1.1
+Host: localhost:8080</code></pre>
+                                </div>
+                            </div>
+                        </div>
+
+                        
+                        <div>
+                            <ul class="nav nav-tabs" role="tablist">
+                                
+                                <li role="presentation" class="active">
+                                    <a href="#request-beers-get-beers-by-manufacturer-name-responses-ccf7df11-7944-4eda-88ce-74c8e1cb02c4" data-toggle="tab">
+                                        
+                                            OK
+                                        
+                                    </a>
+                                </li>
+                                
+                                <li role="presentation">
+                                    <a href="#request-beers-get-beers-by-manufacturer-name-responses-f095238e-d795-4f72-a3d8-375f1b4c6fe9" data-toggle="tab">
+                                        
+                                            NO CONTENT
+                                        
+                                    </a>
+                                </li>
+                                
+                            </ul>
+                            <div class="tab-content">
+                                
+                                <div class="tab-pane active" id="request-beers-get-beers-by-manufacturer-name-responses-ccf7df11-7944-4eda-88ce-74c8e1cb02c4">
+                                    <table class="table table-bordered">
+                                        <tr><th style="width: 20%;">Status</th><td>200 OK</td></tr>
+                                        
+                                        <tr><th style="width: 20%;">Content-Type</th><td>application/json</td></tr>
+                                        
+                                        
+                                            
+                                            <tr><td class="response-text-sample" colspan="2">
+                                                <pre><code>{
+    "currentPage": 1,
+    "totalPages": 1,
+    "pageSize": 10,
+    "totalItems": 1,
+    "beers": [
+        {
+            "id": 17,
+            "name": "Hefe-Weissbier Naturtrüb",
+            "type": "Hefeweizen",
+            "description": "Cloudy in appearance, it presents itself in the glass with a brilliant velvety golden color, under a robust crown of foam that truly deserves this name.",
+            "abv": 5.5,
+            "manufacturer": {
+                "id": 6,
+                "name": "Paulaner Brauerei",
+                "nationality": "Germany"
+            }
+        }
+    ]
+}</code></pre>
+                                            </td></tr>
+                                            
+                                        
+                                    </table>
+                                </div>
+                                
+                                <div class="tab-pane" id="request-beers-get-beers-by-manufacturer-name-responses-f095238e-d795-4f72-a3d8-375f1b4c6fe9">
+                                    <table class="table table-bordered">
+                                        <tr><th style="width: 20%;">Status</th><td>0 NO CONTENT</td></tr>
+                                        
+                                        
+                                    </table>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        
+
+                        <hr>
+                    </div>
+                    
+                    
+                    <div class="request">
+
+                        <h4 id="request-beers-get-beers-by-manufacturer-nationality">
+                            Get beers by manufacturer nationality
+                            <a href="#request-beers-get-beers-by-manufacturer-nationality"><i class="glyphicon glyphicon-link"></i></a>
+                        </h4>
+
+                        <div><p>Get beers from the catalog by manufacturer nationality.</p>
+
+<p>By default, page size is 10 elements and results are sorted by id in ascending order.</p>
+
+<p>This request can be performed without any authentication.</p>
+</div>
+
+                        <div>
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li role="presentation" class="active"><a href="#request-beers-get-beers-by-manufacturer-nationality-example-curl" data-toggle="tab">Curl</a></li>
+                                <li role="presentation"><a href="#request-beers-get-beers-by-manufacturer-nationality-example-http" data-toggle="tab">HTTP</a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="request-beers-get-beers-by-manufacturer-nationality-example-curl">
+                                    <pre><code class="hljs curl">curl -X GET "http://localhost:8080/beercatalog/beers?manufacturer_nationality=kingdom"</code></pre>
+                                </div>
+                                <div class="tab-pane" id="request-beers-get-beers-by-manufacturer-nationality-example-http">
+                                    <pre><code class="hljs http">GET /beercatalog/beers?manufacturer_nationality=kingdom HTTP/1.1
+Host: localhost:8080</code></pre>
+                                </div>
+                            </div>
+                        </div>
+
+                        
+                        <div>
+                            <ul class="nav nav-tabs" role="tablist">
+                                
+                                <li role="presentation" class="active">
+                                    <a href="#request-beers-get-beers-by-manufacturer-nationality-responses-ca1f6e2e-8498-4049-b770-0ad9ec543145" data-toggle="tab">
+                                        
+                                            OK
+                                        
+                                    </a>
+                                </li>
+                                
+                                <li role="presentation">
+                                    <a href="#request-beers-get-beers-by-manufacturer-nationality-responses-58684010-a432-40d9-8a52-4265afc1998d" data-toggle="tab">
+                                        
+                                            NO CONTENT
+                                        
+                                    </a>
+                                </li>
+                                
+                            </ul>
+                            <div class="tab-content">
+                                
+                                <div class="tab-pane active" id="request-beers-get-beers-by-manufacturer-nationality-responses-ca1f6e2e-8498-4049-b770-0ad9ec543145">
+                                    <table class="table table-bordered">
+                                        <tr><th style="width: 20%;">Status</th><td>200 OK</td></tr>
+                                        
+                                        <tr><th style="width: 20%;">Content-Type</th><td>application/json</td></tr>
+                                        
+                                        
+                                            
+                                            <tr><td class="response-text-sample" colspan="2">
+                                                <pre><code>{
+    "currentPage": 1,
+    "totalPages": 1,
+    "pageSize": 10,
+    "totalItems": 1,
+    "beers": [
+        {
+            "id": 17,
+            "name": "Hefe-Weissbier Naturtrüb",
+            "type": "Hefeweizen",
+            "description": "Cloudy in appearance, it presents itself in the glass with a brilliant velvety golden color, under a robust crown of foam that truly deserves this name.",
+            "abv": 5.5,
+            "manufacturer": {
+                "id": 6,
+                "name": "Paulaner Brauerei",
+                "nationality": "Germany"
+            }
+        }
+    ]
+}</code></pre>
+                                            </td></tr>
+                                            
+                                        
+                                    </table>
+                                </div>
+                                
+                                <div class="tab-pane" id="request-beers-get-beers-by-manufacturer-nationality-responses-58684010-a432-40d9-8a52-4265afc1998d">
+                                    <table class="table table-bordered">
+                                        <tr><th style="width: 20%;">Status</th><td>0 NO CONTENT</td></tr>
+                                        
+                                        
+                                    </table>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        
+
+                        <hr>
+                    </div>
+                    
+                    
+                    <div class="request">
+
+                        <h4 id="request-beers-get-one-beer-by-id">
+                            Get one beer by id
+                            <a href="#request-beers-get-one-beer-by-id"><i class="glyphicon glyphicon-link"></i></a>
+                        </h4>
+
+                        <div><p>Get beers from the catalog by manufacturer nationality.</p>
+
+<p>By default, page size is 10 elements and results are sorted by id in ascending order.</p>
+
+<p>This request can be performed without any authentication.</p>
+</div>
+
+                        <div>
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li role="presentation" class="active"><a href="#request-beers-get-one-beer-by-id-example-curl" data-toggle="tab">Curl</a></li>
+                                <li role="presentation"><a href="#request-beers-get-one-beer-by-id-example-http" data-toggle="tab">HTTP</a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="request-beers-get-one-beer-by-id-example-curl">
+                                    <pre><code class="hljs curl">curl -X GET "http://localhost:8080/beercatalog/beers/1"</code></pre>
+                                </div>
+                                <div class="tab-pane" id="request-beers-get-one-beer-by-id-example-http">
+                                    <pre><code class="hljs http">GET /beercatalog/beers/1 HTTP/1.1
+Host: localhost:8080</code></pre>
+                                </div>
+                            </div>
+                        </div>
+
+                        
+                        <div>
+                            <ul class="nav nav-tabs" role="tablist">
+                                
+                                <li role="presentation" class="active">
+                                    <a href="#request-beers-get-one-beer-by-id-responses-4a600c9f-f3ab-46a6-962f-4d3a8ae7c3fa" data-toggle="tab">
+                                        
+                                            OK
+                                        
+                                    </a>
+                                </li>
+                                
+                                <li role="presentation">
+                                    <a href="#request-beers-get-one-beer-by-id-responses-b1499d2d-1b05-4253-88c6-c627da1bfb80" data-toggle="tab">
+                                        
+                                            NOT FOUND
+                                        
+                                    </a>
+                                </li>
+                                
+                            </ul>
+                            <div class="tab-content">
+                                
+                                <div class="tab-pane active" id="request-beers-get-one-beer-by-id-responses-4a600c9f-f3ab-46a6-962f-4d3a8ae7c3fa">
+                                    <table class="table table-bordered">
+                                        <tr><th style="width: 20%;">Status</th><td>200 OK</td></tr>
+                                        
+                                        <tr><th style="width: 20%;">Content-Type</th><td>application/json</td></tr>
+                                        
+                                        
+                                            
+                                            <tr><td class="response-text-sample" colspan="2">
+                                                <pre><code>{
+    "id": 1,
+    "name": "Budweiser",
+    "type": "American Lager",
+    "description": "Brewed using a blend of imported and classic American aroma hops, and a blend of barley malts and rice. Budweiser is brewed with time-honored methods including “kraeusening” for natural carbonation and Beechwood aging, which results in unparalleled balance and character.",
+    "abv": 5.0,
+    "manufacturer": {
+        "id": 1,
+        "name": "Anheuser-Busch",
+        "nationality": "United States"
+    }
+}</code></pre>
+                                            </td></tr>
+                                            
+                                        
+                                    </table>
+                                </div>
+                                
+                                <div class="tab-pane" id="request-beers-get-one-beer-by-id-responses-b1499d2d-1b05-4253-88c6-c627da1bfb80">
+                                    <table class="table table-bordered">
+                                        <tr><th style="width: 20%;">Status</th><td>404 Not Found</td></tr>
+                                        
+                                        <tr><th style="width: 20%;">Content-Type</th><td>application/json</td></tr>
+                                        
+                                        
+                                            
+                                            <tr><td class="response-text-sample" colspan="2">
+                                                <pre><code>{
+    "status": 404,
+    "message": "Beer not found with id: 0",
+    "currentTimeStamp": "26-01-2022 21:57:42"
+}</code></pre>
+                                            </td></tr>
+                                            
+                                        
+                                    </table>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        
+
+                        <hr>
+                    </div>
+                    
+                    
+                    <div class="request">
+
+                        <h4 id="request-beers-create-a-beer">
+                            Create a beer
+                            <a href="#request-beers-create-a-beer"><i class="glyphicon glyphicon-link"></i></a>
+                        </h4>
+
+                        <div><p>Creates a new beer from a well-formed JSON with the required fields.</p>
+
+<p>Required fields are:</p>
+
+<ul>
+<li><strong>name</strong></li>
+<li><strong>description</strong></li>
+<li><strong>abv</strong></li>
+<li><strong>manufacturer_id</strong>
+<br /></li>
+</ul>
+
+<p>The attributes manufacturer_name and manufacturer_nationality will be ignored if specified.</p>
+
+<p><strong>Admin</strong> user can create a new beer from any manufacturer.</p>
+
+<p><strong>Manufacturer</strong> user can create a new beer <strong>only</strong> if it is its own manufacturer.</p>
+
+<p><strong>Anonymous</strong> user can not create a new beer.</p>
+
+<p>If using <strong>Postman</strong> when changing between users, do not forget to <strong>clean cookies</strong> between each user test case.</p>
+</div>
+
+                        <div>
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li role="presentation" class="active"><a href="#request-beers-create-a-beer-example-curl" data-toggle="tab">Curl</a></li>
+                                <li role="presentation"><a href="#request-beers-create-a-beer-example-http" data-toggle="tab">HTTP</a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="request-beers-create-a-beer-example-curl">
+                                    <pre><code class="hljs curl">curl -X POST -d '{
+    "name": "Equilater",
+    "type": "Stout",
+    "description": "description text...",
+    "abv": 5.0,
+    "manufacturer": {
+        "id": 2
+    }
+}' "http://localhost:8080/beercatalog/beers"</code></pre>
+                                </div>
+                                <div class="tab-pane" id="request-beers-create-a-beer-example-http">
+                                    <pre><code class="hljs http">POST /beercatalog/beers HTTP/1.1
+Host: localhost:8080
+
+{
+    "name": "Equilater",
+    "type": "Stout",
+    "description": "description text...",
+    "abv": 5.0,
+    "manufacturer": {
+        "id": 2
+    }
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+
+                        
+                        <div>
+                            <ul class="nav nav-tabs" role="tablist">
+                                
+                                <li role="presentation" class="active">
+                                    <a href="#request-beers-create-a-beer-responses-956f1cdf-1ca9-4ecd-a01d-fa27199a1218" data-toggle="tab">
+                                        
+                                            OK
+                                        
+                                    </a>
+                                </li>
+                                
+                                <li role="presentation">
+                                    <a href="#request-beers-create-a-beer-responses-88ca9ffd-03a8-4896-a639-5acb9a7eb7af" data-toggle="tab">
+                                        
+                                            MISSING REQUIRED FIELDS
+                                        
+                                    </a>
+                                </li>
+                                
+                                <li role="presentation">
+                                    <a href="#request-beers-create-a-beer-responses-2e9fe699-a8db-472e-91b8-69ad6766483b" data-toggle="tab">
+                                        
+                                            NAME ALREADY EXISTS
+                                        
+                                    </a>
+                                </li>
+                                
+                                <li role="presentation">
+                                    <a href="#request-beers-create-a-beer-responses-ae77a84d-244d-4164-86d9-5cfc1a64eebd" data-toggle="tab">
+                                        
+                                            UNAUTHORIZED
+                                        
+                                    </a>
+                                </li>
+                                
+                                <li role="presentation">
+                                    <a href="#request-beers-create-a-beer-responses-0f5ee67b-f36d-4abc-9bba-1b2a5f20ecc8" data-toggle="tab">
+                                        
+                                            FORBIDDEN
+                                        
+                                    </a>
+                                </li>
+                                
+                            </ul>
+                            <div class="tab-content">
+                                
+                                <div class="tab-pane active" id="request-beers-create-a-beer-responses-956f1cdf-1ca9-4ecd-a01d-fa27199a1218">
+                                    <table class="table table-bordered">
+                                        <tr><th style="width: 20%;">Status</th><td>200 OK</td></tr>
+                                        
+                                        <tr><th style="width: 20%;">Content-Type</th><td>application/json</td></tr>
+                                        
+                                        
+                                            
+                                            <tr><td class="response-text-sample" colspan="2">
+                                                <pre><code>{
+    "id": 18,
+    "name": "Equilater",
+    "type": "Stout",
+    "description": "description text...",
+    "abv": 5.0,
+    "manufacturer": {
+        "id": 2,
+        "name": "Victory Brewing Company",
+        "nationality": "United States"
+    }
+}</code></pre>
+                                            </td></tr>
+                                            
+                                        
+                                    </table>
+                                </div>
+                                
+                                <div class="tab-pane" id="request-beers-create-a-beer-responses-88ca9ffd-03a8-4896-a639-5acb9a7eb7af">
+                                    <table class="table table-bordered">
+                                        <tr><th style="width: 20%;">Status</th><td>422 Unprocessable Entity (WebDAV) (RFC 4918)</td></tr>
+                                        
+                                        <tr><th style="width: 20%;">Content-Type</th><td>application/json</td></tr>
+                                        
+                                        
+                                            
+                                            <tr><td class="response-text-sample" colspan="2">
+                                                <pre><code>{
+    "status": 422,
+    "message": "The requested action could not be executed when required fields are missing.",
+    "currentTimeStamp": "26-01-2022 22:47:26"
+}</code></pre>
+                                            </td></tr>
+                                            
+                                        
+                                    </table>
+                                </div>
+                                
+                                <div class="tab-pane" id="request-beers-create-a-beer-responses-2e9fe699-a8db-472e-91b8-69ad6766483b">
+                                    <table class="table table-bordered">
+                                        <tr><th style="width: 20%;">Status</th><td>406 Not Acceptable</td></tr>
+                                        
+                                        <tr><th style="width: 20%;">Content-Type</th><td>application/json</td></tr>
+                                        
+                                        
+                                            
+                                            <tr><td class="response-text-sample" colspan="2">
+                                                <pre><code>{
+    "status": 406,
+    "message": "The name of the beer already exists. Please choose another name.",
+    "currentTimeStamp": "26-01-2022 19:48:23"
+}</code></pre>
+                                            </td></tr>
+                                            
+                                        
+                                    </table>
+                                </div>
+                                
+                                <div class="tab-pane" id="request-beers-create-a-beer-responses-ae77a84d-244d-4164-86d9-5cfc1a64eebd">
+                                    <table class="table table-bordered">
+                                        <tr><th style="width: 20%;">Status</th><td>401 Unauthorized</td></tr>
+                                        
+                                        <tr><th style="width: 20%;">Content-Type</th><td>application/json</td></tr>
+                                        
+                                        
+                                            
+                                            <tr><td class="response-text-sample" colspan="2">
+                                                <pre><code>{
+    "timestamp": "2022-01-26T21:32:33.924+00:00",
+    "status": 401,
+    "error": "Unauthorized",
+    "message": "Unauthorized",
+    "path": "/beercatalog/beers"
+}</code></pre>
+                                            </td></tr>
+                                            
+                                        
+                                    </table>
+                                </div>
+                                
+                                <div class="tab-pane" id="request-beers-create-a-beer-responses-0f5ee67b-f36d-4abc-9bba-1b2a5f20ecc8">
+                                    <table class="table table-bordered">
+                                        <tr><th style="width: 20%;">Status</th><td>403 Forbidden</td></tr>
+                                        
+                                        <tr><th style="width: 20%;">Content-Type</th><td>application/json</td></tr>
+                                        
+                                        
+                                            
+                                            <tr><td class="response-text-sample" colspan="2">
+                                                <pre><code>{
+    "status": 403,
+    "message": "The authenticated user does not have the necessary permissions to access the resource.",
+    "currentTimeStamp": "26-01-2022 22:40:45"
+}</code></pre>
+                                            </td></tr>
+                                            
+                                        
+                                    </table>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        
+
+                        <hr>
+                    </div>
+                    
+                    
+                    <div class="request">
+
+                        <h4 id="request-beers-update-a-beer">
+                            Update a beer
+                            <a href="#request-beers-update-a-beer"><i class="glyphicon glyphicon-link"></i></a>
+                        </h4>
+
+                        <div><p>Updates a beer from a well-formed JSON with the required fields.</p>
+
+<p>Required fields are:</p>
+
+<ul>
+<li><strong>id</strong></li>
+<li><strong>name</strong></li>
+<li><strong>description</strong></li>
+<li><strong>abv</strong></li>
+<li><strong>manufacturer_id</strong>
+<br /></li>
+</ul>
+
+<p><strong>Admin</strong> user can update a beer from any manufacturer.</p>
+
+<p><strong>Manufacturer</strong> user can update a beer <strong>only</strong> if it is its own manufacturer.</p>
+
+<p><strong>Anonymous</strong> user can not update a beer.</p>
+
+<p>If using <strong>Postman</strong> when changing between users, do not forget to <strong>clean cookies</strong> between each user test case.</p>
+</div>
+
+                        <div>
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li role="presentation" class="active"><a href="#request-beers-update-a-beer-example-curl" data-toggle="tab">Curl</a></li>
+                                <li role="presentation"><a href="#request-beers-update-a-beer-example-http" data-toggle="tab">HTTP</a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="request-beers-update-a-beer-example-curl">
+                                    <pre><code class="hljs curl">curl -X PUT -d '{
+    "id": 17,
+    "name": "Münchner Hell",
+    "type": "Lager",
+    "description": "description text...",
+    "abv": 4.9,
+    "manufacturer": {
+        "id": 6
+    }
+}' "http://localhost:8080/beercatalog/beers"</code></pre>
+                                </div>
+                                <div class="tab-pane" id="request-beers-update-a-beer-example-http">
+                                    <pre><code class="hljs http">PUT /beercatalog/beers HTTP/1.1
+Host: localhost:8080
+
+{
+    "id": 17,
+    "name": "Münchner Hell",
+    "type": "Lager",
+    "description": "description text...",
+    "abv": 4.9,
+    "manufacturer": {
+        "id": 6
+    }
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+
+                        
+                        <div>
+                            <ul class="nav nav-tabs" role="tablist">
+                                
+                                <li role="presentation" class="active">
+                                    <a href="#request-beers-update-a-beer-responses-650be075-47e3-4f46-894a-0360c3b0323c" data-toggle="tab">
+                                        
+                                            OK
+                                        
+                                    </a>
+                                </li>
+                                
+                                <li role="presentation">
+                                    <a href="#request-beers-update-a-beer-responses-ac0be1ff-de33-4d49-9df9-482dd6427640" data-toggle="tab">
+                                        
+                                            MISSING REQUIRED FIELDS
+                                        
+                                    </a>
+                                </li>
+                                
+                                <li role="presentation">
+                                    <a href="#request-beers-update-a-beer-responses-e5abecc2-203d-4dd4-bf29-add59dbe8bf7" data-toggle="tab">
+                                        
+                                            NAME ALREADY EXISTS
+                                        
+                                    </a>
+                                </li>
+                                
+                                <li role="presentation">
+                                    <a href="#request-beers-update-a-beer-responses-28eea71d-ff2f-41c5-a728-0f364658f579" data-toggle="tab">
+                                        
+                                            NOT FOUND
+                                        
+                                    </a>
+                                </li>
+                                
+                                <li role="presentation">
+                                    <a href="#request-beers-update-a-beer-responses-075363a6-7807-4c1e-8ccc-2ee1a1e31e5b" data-toggle="tab">
+                                        
+                                            UNAUTHORIZED
+                                        
+                                    </a>
+                                </li>
+                                
+                                <li role="presentation">
+                                    <a href="#request-beers-update-a-beer-responses-b6671f7b-78a2-4bb6-8bbf-7fd68b824203" data-toggle="tab">
+                                        
+                                            FORBIDDEN
+                                        
+                                    </a>
+                                </li>
+                                
+                            </ul>
+                            <div class="tab-content">
+                                
+                                <div class="tab-pane active" id="request-beers-update-a-beer-responses-650be075-47e3-4f46-894a-0360c3b0323c">
+                                    <table class="table table-bordered">
+                                        <tr><th style="width: 20%;">Status</th><td>200 OK</td></tr>
+                                        
+                                        <tr><th style="width: 20%;">Content-Type</th><td>application/json</td></tr>
+                                        
+                                        
+                                            
+                                            <tr><td class="response-text-sample" colspan="2">
+                                                <pre><code>{
+    "id": 17,
+    "name": "Münchner Hell",
+    "type": "Lager",
+    "description": "description text...",
+    "abv": 4.9,
+    "manufacturer": {
+        "id": 6,
+        "name": "Paulaner Brauerei",
+        "nationality": "Germany"
+    }
+}</code></pre>
+                                            </td></tr>
+                                            
+                                        
+                                    </table>
+                                </div>
+                                
+                                <div class="tab-pane" id="request-beers-update-a-beer-responses-ac0be1ff-de33-4d49-9df9-482dd6427640">
+                                    <table class="table table-bordered">
+                                        <tr><th style="width: 20%;">Status</th><td>422 Unprocessable Entity (WebDAV) (RFC 4918)</td></tr>
+                                        
+                                        <tr><th style="width: 20%;">Content-Type</th><td>application/json</td></tr>
+                                        
+                                        
+                                            
+                                            <tr><td class="response-text-sample" colspan="2">
+                                                <pre><code>{
+    "status": 422,
+    "message": "The requested action could not be executed when required fields are missing.",
+    "currentTimeStamp": "26-01-2022 22:47:26"
+}</code></pre>
+                                            </td></tr>
+                                            
+                                        
+                                    </table>
+                                </div>
+                                
+                                <div class="tab-pane" id="request-beers-update-a-beer-responses-e5abecc2-203d-4dd4-bf29-add59dbe8bf7">
+                                    <table class="table table-bordered">
+                                        <tr><th style="width: 20%;">Status</th><td>406 Not Acceptable</td></tr>
+                                        
+                                        <tr><th style="width: 20%;">Content-Type</th><td>application/json</td></tr>
+                                        
+                                        
+                                            
+                                            <tr><td class="response-text-sample" colspan="2">
+                                                <pre><code>{
+    "status": 406,
+    "message": "The name of the beer already exists. Please choose another name.",
+    "currentTimeStamp": "26-01-2022 22:48:23"
+}</code></pre>
+                                            </td></tr>
+                                            
+                                        
+                                    </table>
+                                </div>
+                                
+                                <div class="tab-pane" id="request-beers-update-a-beer-responses-28eea71d-ff2f-41c5-a728-0f364658f579">
+                                    <table class="table table-bordered">
+                                        <tr><th style="width: 20%;">Status</th><td>404 Not Found</td></tr>
+                                        
+                                        <tr><th style="width: 20%;">Content-Type</th><td>application/json</td></tr>
+                                        
+                                        
+                                            
+                                            <tr><td class="response-text-sample" colspan="2">
+                                                <pre><code>{
+    "status": 404,
+    "message": "Beer not found with id: 35",
+    "currentTimeStamp": "27-01-2022 00:15:32"
+}</code></pre>
+                                            </td></tr>
+                                            
+                                        
+                                    </table>
+                                </div>
+                                
+                                <div class="tab-pane" id="request-beers-update-a-beer-responses-075363a6-7807-4c1e-8ccc-2ee1a1e31e5b">
+                                    <table class="table table-bordered">
+                                        <tr><th style="width: 20%;">Status</th><td>401 Unauthorized</td></tr>
+                                        
+                                        <tr><th style="width: 20%;">Content-Type</th><td>application/json</td></tr>
+                                        
+                                        
+                                            
+                                            <tr><td class="response-text-sample" colspan="2">
+                                                <pre><code>{
+    "timestamp": "2022-01-26T21:32:33.924+00:00",
+    "status": 401,
+    "error": "Unauthorized",
+    "message": "Unauthorized",
+    "path": "/beercatalog/beers"
+}</code></pre>
+                                            </td></tr>
+                                            
+                                        
+                                    </table>
+                                </div>
+                                
+                                <div class="tab-pane" id="request-beers-update-a-beer-responses-b6671f7b-78a2-4bb6-8bbf-7fd68b824203">
+                                    <table class="table table-bordered">
+                                        <tr><th style="width: 20%;">Status</th><td>403 Forbidden</td></tr>
+                                        
+                                        <tr><th style="width: 20%;">Content-Type</th><td>application/json</td></tr>
+                                        
+                                        
+                                            
+                                            <tr><td class="response-text-sample" colspan="2">
+                                                <pre><code>{
+    "status": 403,
+    "message": "The authenticated user does not have the necessary permissions to access the resource.",
+    "currentTimeStamp": "26-01-2022 22:40:45"
+}</code></pre>
+                                            </td></tr>
+                                            
+                                        
+                                    </table>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        
+
+                        <hr>
+                    </div>
+                    
+                    
+                    <div class="request">
+
+                        <h4 id="request-beers-delete-a-beer">
+                            Delete a beer
+                            <a href="#request-beers-delete-a-beer"><i class="glyphicon glyphicon-link"></i></a>
+                        </h4>
+
+                        <div><p>Deletes a beer given a valid id.</p>
+
+<p><strong>Admin</strong> user can delete a beer from any manufacturer.</p>
+
+<p><strong>Manufacturer</strong> user can delete a beer <strong>only</strong> if it is its own manufacturer.</p>
+
+<p><strong>Anonymous</strong> user can not delete a beer.</p>
+
+<p>If using <strong>Postman</strong> when changing between users, do not forget to <strong>clean cookies</strong> between each user test case.</p>
+</div>
+
+                        <div>
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li role="presentation" class="active"><a href="#request-beers-delete-a-beer-example-curl" data-toggle="tab">Curl</a></li>
+                                <li role="presentation"><a href="#request-beers-delete-a-beer-example-http" data-toggle="tab">HTTP</a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="request-beers-delete-a-beer-example-curl">
+                                    <pre><code class="hljs curl">curl -X DELETE "http://localhost:8080/beercatalog/beers/12"</code></pre>
+                                </div>
+                                <div class="tab-pane" id="request-beers-delete-a-beer-example-http">
+                                    <pre><code class="hljs http">DELETE /beercatalog/beers/12 HTTP/1.1
+Host: localhost:8080</code></pre>
+                                </div>
+                            </div>
+                        </div>
+
+                        
+                        <div>
+                            <ul class="nav nav-tabs" role="tablist">
+                                
+                                <li role="presentation" class="active">
+                                    <a href="#request-beers-delete-a-beer-responses-9e49d50d-a8cb-429c-86b8-01b0455471f6" data-toggle="tab">
+                                        
+                                            OK
+                                        
+                                    </a>
+                                </li>
+                                
+                                <li role="presentation">
+                                    <a href="#request-beers-delete-a-beer-responses-3b9a965b-afd6-48fe-aa19-3b1b17b4481e" data-toggle="tab">
+                                        
+                                            NOT FOUND
+                                        
+                                    </a>
+                                </li>
+                                
+                                <li role="presentation">
+                                    <a href="#request-beers-delete-a-beer-responses-1273a31b-e713-4c6c-a4a4-78455d2cbebf" data-toggle="tab">
+                                        
+                                            UNAUTHORIZED
+                                        
+                                    </a>
+                                </li>
+                                
+                                <li role="presentation">
+                                    <a href="#request-beers-delete-a-beer-responses-8ea97d9c-cb89-46a6-b015-a4d1910b3c1e" data-toggle="tab">
+                                        
+                                            FORBIDDEN
+                                        
+                                    </a>
+                                </li>
+                                
+                            </ul>
+                            <div class="tab-content">
+                                
+                                <div class="tab-pane active" id="request-beers-delete-a-beer-responses-9e49d50d-a8cb-429c-86b8-01b0455471f6">
+                                    <table class="table table-bordered">
+                                        <tr><th style="width: 20%;">Status</th><td>200 OK</td></tr>
+                                        
+                                        <tr><th style="width: 20%;">Content-Type</th><td>application/json</td></tr>
+                                        
+                                        
+                                            
+                                            <tr><td class="response-text-sample" colspan="2">
+                                                <pre><code>{
+    "status": 200,
+    "message": "Beer deleted with id: 12",
+    "currentTimeStamp": "27-01-2022 01:01:08"
+}</code></pre>
+                                            </td></tr>
+                                            
+                                        
+                                    </table>
+                                </div>
+                                
+                                <div class="tab-pane" id="request-beers-delete-a-beer-responses-3b9a965b-afd6-48fe-aa19-3b1b17b4481e">
+                                    <table class="table table-bordered">
+                                        <tr><th style="width: 20%;">Status</th><td>404 Not Found</td></tr>
+                                        
+                                        <tr><th style="width: 20%;">Content-Type</th><td>application/json</td></tr>
+                                        
+                                        
+                                            
+                                            <tr><td class="response-text-sample" colspan="2">
+                                                <pre><code>{
+    "status": 404,
+    "message": "Beer not found with id: 35",
+    "currentTimeStamp": "27-01-2022 00:15:32"
+}</code></pre>
+                                            </td></tr>
+                                            
+                                        
+                                    </table>
+                                </div>
+                                
+                                <div class="tab-pane" id="request-beers-delete-a-beer-responses-1273a31b-e713-4c6c-a4a4-78455d2cbebf">
+                                    <table class="table table-bordered">
+                                        <tr><th style="width: 20%;">Status</th><td>401 Unauthorized</td></tr>
+                                        
+                                        <tr><th style="width: 20%;">Content-Type</th><td>application/json</td></tr>
+                                        
+                                        
+                                            
+                                            <tr><td class="response-text-sample" colspan="2">
+                                                <pre><code>{
+    "timestamp": "2022-01-26T21:32:33.924+00:00",
+    "status": 401,
+    "error": "Unauthorized",
+    "message": "Unauthorized",
+    "path": "/beercatalog/beers"
+}</code></pre>
+                                            </td></tr>
+                                            
+                                        
+                                    </table>
+                                </div>
+                                
+                                <div class="tab-pane" id="request-beers-delete-a-beer-responses-8ea97d9c-cb89-46a6-b015-a4d1910b3c1e">
+                                    <table class="table table-bordered">
+                                        <tr><th style="width: 20%;">Status</th><td>403 Forbidden</td></tr>
+                                        
+                                        <tr><th style="width: 20%;">Content-Type</th><td>application/json</td></tr>
+                                        
+                                        
+                                            
+                                            <tr><td class="response-text-sample" colspan="2">
+                                                <pre><code>{
+    "status": 403,
+    "message": "The authenticated user does not have the necessary permissions to access the resource.",
+    "currentTimeStamp": "26-01-2022 22:40:45"
+}</code></pre>
+                                            </td></tr>
+                                            
+                                        
+                                    </table>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        
+
+                        <hr>
+                    </div>
+                    
+
+                </div>
+                
+                
+                <div class="endpoints-group">
+                    <h3 id="folder-manufacturers">
+                        Manufacturers
+                        <a href="#folder-manufacturers"><i class="glyphicon glyphicon-link"></i></a>
+                    </h3>
+
+                    <div><p>The operations available are:</p>
+
+<ul>
+<li>Obtain information by any manufacturer attribute</li>
+<li>Add a new manufacturer</li>
+<li>Update an existing manufacturer</li>
+<li>Delete a manufacturer</li>
+</ul>
+</div>
+
+                    
+                    
+                    <div class="request">
+
+                        <h4 id="request-manufacturers-get-all-manufacturers">
+                            Get all manufacturers
+                            <a href="#request-manufacturers-get-all-manufacturers"><i class="glyphicon glyphicon-link"></i></a>
+                        </h4>
+
+                        <div><p>Get all manufacturers from the catalog.</p>
+
+<p>By default, page size is 10 elements and results are sorted by id in ascending order.</p>
+
+<p>This request can be performed without any authentication.</p>
+</div>
+
+                        <div>
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li role="presentation" class="active"><a href="#request-manufacturers-get-all-manufacturers-example-curl" data-toggle="tab">Curl</a></li>
+                                <li role="presentation"><a href="#request-manufacturers-get-all-manufacturers-example-http" data-toggle="tab">HTTP</a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="request-manufacturers-get-all-manufacturers-example-curl">
+                                    <pre><code class="hljs curl">curl -X GET "http://localhost:8080/beercatalog/manufacturers"</code></pre>
+                                </div>
+                                <div class="tab-pane" id="request-manufacturers-get-all-manufacturers-example-http">
+                                    <pre><code class="hljs http">GET /beercatalog/manufacturers HTTP/1.1
+Host: localhost:8080</code></pre>
+                                </div>
+                            </div>
+                        </div>
+
+                        
+                        <div>
+                            <ul class="nav nav-tabs" role="tablist">
+                                
+                                <li role="presentation" class="active">
+                                    <a href="#request-manufacturers-get-all-manufacturers-responses-a518e0bc-72f9-4cba-bf19-7167abec246a" data-toggle="tab">
+                                        
+                                            OK
+                                        
+                                    </a>
+                                </li>
+                                
+                                <li role="presentation">
+                                    <a href="#request-manufacturers-get-all-manufacturers-responses-e9c7d41b-cf1a-4d8c-84ef-35a56ba5536b" data-toggle="tab">
+                                        
+                                            NO CONTENT
+                                        
+                                    </a>
+                                </li>
+                                
+                            </ul>
+                            <div class="tab-content">
+                                
+                                <div class="tab-pane active" id="request-manufacturers-get-all-manufacturers-responses-a518e0bc-72f9-4cba-bf19-7167abec246a">
+                                    <table class="table table-bordered">
+                                        <tr><th style="width: 20%;">Status</th><td>200 OK</td></tr>
+                                        
+                                        <tr><th style="width: 20%;">Content-Type</th><td>application/json</td></tr>
+                                        
+                                        
+                                            
+                                            <tr><td class="response-text-sample" colspan="2">
+                                                <pre><code>{
+    "currentPage": 1,
+    "totalPages": 2,
+    "pageSize": 10,
+    "totalItems": 14,
+    "manufacturers": [
+        {
+            "id": 1,
+            "name": "Anheuser-Busch",
+            "nationality": "United States"
+        },
+        {
+            "id": 2,
+            "name": "Victory Brewing Company",
+            "nationality": "United States"
+        },
+        {
+            "id": 3,
+            "name": "Tröegs Brewing Company",
+            "nationality": "United States"
+        },
+        {
+            "id": 4,
+            "name": "Lagunitas Brewing Company",
+            "nationality": "United States"
+        },
+        {
+            "id": 5,
+            "name": "Yuengling Brewery",
+            "nationality": "United States"
+        },
+        {
+            "id": 6,
+            "name": "Paulaner Brauerei",
+            "nationality": "Germany"
+        },
+        {
+            "id": 7,
+            "name": "Spoetzl Brewery",
+            "nationality": "United States"
+        },
+        {
+            "id": 8,
+            "name": "Cervecería Cuauhtémoc Moctezuma",
+            "nationality": "Mexico"
+        },
+        {
+            "id": 9,
+            "name": "Boston Beer Company",
+            "nationality": "United States"
+        },
+        {
+            "id": 10,
+            "name": "Capital Brewery",
+            "nationality": "United States"
+        }
+    ]
+}</code></pre>
+                                            </td></tr>
+                                            
+                                        
+                                    </table>
+                                </div>
+                                
+                                <div class="tab-pane" id="request-manufacturers-get-all-manufacturers-responses-e9c7d41b-cf1a-4d8c-84ef-35a56ba5536b">
+                                    <table class="table table-bordered">
+                                        <tr><th style="width: 20%;">Status</th><td>204 No Content</td></tr>
+                                        
+                                        
+                                    </table>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        
+
+                        <hr>
+                    </div>
+                    
+                    
+                    <div class="request">
+
+                        <h4 id="request-manufacturers-get-all-manufacturers-with-pagination-and-sorting">
+                            Get all manufacturers with pagination and sorting
+                            <a href="#request-manufacturers-get-all-manufacturers-with-pagination-and-sorting"><i class="glyphicon glyphicon-link"></i></a>
+                        </h4>
+
+                        <div><p>Get manufacturers from the catalog specifing page size, page number and sorting by a field with an specific order.</p>
+
+<p>If none of these parameters are specified, by default, page size is 10 elements and results are sorted by id in ascending order.</p>
+
+<p>This request can be performed without any authentication.</p>
+</div>
+
+                        <div>
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li role="presentation" class="active"><a href="#request-manufacturers-get-all-manufacturers-with-pagination-and-sorting-example-curl" data-toggle="tab">Curl</a></li>
+                                <li role="presentation"><a href="#request-manufacturers-get-all-manufacturers-with-pagination-and-sorting-example-http" data-toggle="tab">HTTP</a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="request-manufacturers-get-all-manufacturers-with-pagination-and-sorting-example-curl">
+                                    <pre><code class="hljs curl">curl -X GET "http://localhost:8080/beercatalog/manufacturers?pageSize=5&pageNum=3&sort=nationality,desc"</code></pre>
+                                </div>
+                                <div class="tab-pane" id="request-manufacturers-get-all-manufacturers-with-pagination-and-sorting-example-http">
+                                    <pre><code class="hljs http">GET /beercatalog/manufacturers?pageSize=5&pageNum=3&sort=nationality,desc HTTP/1.1
+Host: localhost:8080</code></pre>
+                                </div>
+                            </div>
+                        </div>
+
+                        
+                        <div>
+                            <ul class="nav nav-tabs" role="tablist">
+                                
+                                <li role="presentation" class="active">
+                                    <a href="#request-manufacturers-get-all-manufacturers-with-pagination-and-sorting-responses-001151e4-be85-4e88-b128-62824fbeab15" data-toggle="tab">
+                                        
+                                            OK
+                                        
+                                    </a>
+                                </li>
+                                
+                                <li role="presentation">
+                                    <a href="#request-manufacturers-get-all-manufacturers-with-pagination-and-sorting-responses-28b7974d-c303-42a4-90e6-e04790556347" data-toggle="tab">
+                                        
+                                            NO CONTENT
+                                        
+                                    </a>
+                                </li>
+                                
+                            </ul>
+                            <div class="tab-content">
+                                
+                                <div class="tab-pane active" id="request-manufacturers-get-all-manufacturers-with-pagination-and-sorting-responses-001151e4-be85-4e88-b128-62824fbeab15">
+                                    <table class="table table-bordered">
+                                        <tr><th style="width: 20%;">Status</th><td>200 OK</td></tr>
+                                        
+                                        <tr><th style="width: 20%;">Content-Type</th><td>application/json</td></tr>
+                                        
+                                        
+                                            
+                                            <tr><td class="response-text-sample" colspan="2">
+                                                <pre><code>{
+    "currentPage": 3,
+    "totalPages": 3,
+    "pageSize": 5,
+    "totalItems": 14,
+    "manufacturers": [
+        {
+            "id": 13,
+            "name": "Sharp's Brewery",
+            "nationality": "United Kingdom"
+        },
+        {
+            "id": 12,
+            "name": "Heineken Nederland B.V.",
+            "nationality": "Netherlands"
+        },
+        {
+            "id": 8,
+            "name": "Cervecería Cuauhtémoc Moctezuma",
+            "nationality": "Mexico"
+        },
+        {
+            "id": 6,
+            "name": "Paulaner Brauerei",
+            "nationality": "Germany"
+        }
+    ]
+}</code></pre>
+                                            </td></tr>
+                                            
+                                        
+                                    </table>
+                                </div>
+                                
+                                <div class="tab-pane" id="request-manufacturers-get-all-manufacturers-with-pagination-and-sorting-responses-28b7974d-c303-42a4-90e6-e04790556347">
+                                    <table class="table table-bordered">
+                                        <tr><th style="width: 20%;">Status</th><td>204 No Content</td></tr>
+                                        
+                                        
+                                    </table>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        
+
+                        <hr>
+                    </div>
+                    
+                    
+                    <div class="request">
+
+                        <h4 id="request-manufacturers-get-manufacturers-by-name">
+                            Get manufacturers by name
+                            <a href="#request-manufacturers-get-manufacturers-by-name"><i class="glyphicon glyphicon-link"></i></a>
+                        </h4>
+
+                        <div><p>Get manufacturers from the catalog by name.</p>
+
+<p>By default, page size is 10 elements and results are sorted by id in ascending order.</p>
+
+<p>This request can be performed without any authentication.</p>
+</div>
+
+                        <div>
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li role="presentation" class="active"><a href="#request-manufacturers-get-manufacturers-by-name-example-curl" data-toggle="tab">Curl</a></li>
+                                <li role="presentation"><a href="#request-manufacturers-get-manufacturers-by-name-example-http" data-toggle="tab">HTTP</a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="request-manufacturers-get-manufacturers-by-name-example-curl">
+                                    <pre><code class="hljs curl">curl -X GET "http://localhost:8080/beercatalog/manufacturers?name=Paulaner"</code></pre>
+                                </div>
+                                <div class="tab-pane" id="request-manufacturers-get-manufacturers-by-name-example-http">
+                                    <pre><code class="hljs http">GET /beercatalog/manufacturers?name=Paulaner HTTP/1.1
+Host: localhost:8080</code></pre>
+                                </div>
+                            </div>
+                        </div>
+
+                        
+                        <div>
+                            <ul class="nav nav-tabs" role="tablist">
+                                
+                                <li role="presentation" class="active">
+                                    <a href="#request-manufacturers-get-manufacturers-by-name-responses-508ceb64-999f-48e6-a93f-ff8e7cc57e9e" data-toggle="tab">
+                                        
+                                            OK
+                                        
+                                    </a>
+                                </li>
+                                
+                                <li role="presentation">
+                                    <a href="#request-manufacturers-get-manufacturers-by-name-responses-96482acd-2b86-4a74-b931-471207b15677" data-toggle="tab">
+                                        
+                                            NO CONTENT
+                                        
+                                    </a>
+                                </li>
+                                
+                            </ul>
+                            <div class="tab-content">
+                                
+                                <div class="tab-pane active" id="request-manufacturers-get-manufacturers-by-name-responses-508ceb64-999f-48e6-a93f-ff8e7cc57e9e">
+                                    <table class="table table-bordered">
+                                        <tr><th style="width: 20%;">Status</th><td>200 OK</td></tr>
+                                        
+                                        <tr><th style="width: 20%;">Content-Type</th><td>application/json</td></tr>
+                                        
+                                        
+                                            
+                                            <tr><td class="response-text-sample" colspan="2">
+                                                <pre><code>{
+    "currentPage": 1,
+    "totalPages": 1,
+    "pageSize": 10,
+    "totalItems": 1,
+    "manufacturers": [
+        {
+            "id": 6,
+            "name": "Paulaner Brauerei",
+            "nationality": "Germany"
+        }
+    ]
+}</code></pre>
+                                            </td></tr>
+                                            
+                                        
+                                    </table>
+                                </div>
+                                
+                                <div class="tab-pane" id="request-manufacturers-get-manufacturers-by-name-responses-96482acd-2b86-4a74-b931-471207b15677">
+                                    <table class="table table-bordered">
+                                        <tr><th style="width: 20%;">Status</th><td>204 No Content</td></tr>
+                                        
+                                        
+                                    </table>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        
+
+                        <hr>
+                    </div>
+                    
+                    
+                    <div class="request">
+
+                        <h4 id="request-manufacturers-get-manufacturers-by-nationality">
+                            Get  manufacturers by nationality
+                            <a href="#request-manufacturers-get-manufacturers-by-nationality"><i class="glyphicon glyphicon-link"></i></a>
+                        </h4>
+
+                        <div><p>Get manufacturers from the catalog by nationality.</p>
+
+<p>By default, page size is 10 elements and results are sorted by id in ascending order.</p>
+
+<p>This request can be performed without any authentication.</p>
+</div>
+
+                        <div>
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li role="presentation" class="active"><a href="#request-manufacturers-get-manufacturers-by-nationality-example-curl" data-toggle="tab">Curl</a></li>
+                                <li role="presentation"><a href="#request-manufacturers-get-manufacturers-by-nationality-example-http" data-toggle="tab">HTTP</a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="request-manufacturers-get-manufacturers-by-nationality-example-curl">
+                                    <pre><code class="hljs curl">curl -X GET "http://localhost:8080/beercatalog/manufacturers?nationality=Kingdom"</code></pre>
+                                </div>
+                                <div class="tab-pane" id="request-manufacturers-get-manufacturers-by-nationality-example-http">
+                                    <pre><code class="hljs http">GET /beercatalog/manufacturers?nationality=Kingdom HTTP/1.1
+Host: localhost:8080</code></pre>
+                                </div>
+                            </div>
+                        </div>
+
+                        
+                        <div>
+                            <ul class="nav nav-tabs" role="tablist">
+                                
+                                <li role="presentation" class="active">
+                                    <a href="#request-manufacturers-get-manufacturers-by-nationality-responses-fe1ac871-464b-4d8b-b69b-b9dcb12c3a12" data-toggle="tab">
+                                        
+                                            OK
+                                        
+                                    </a>
+                                </li>
+                                
+                                <li role="presentation">
+                                    <a href="#request-manufacturers-get-manufacturers-by-nationality-responses-4dccc4ed-8aa8-4a03-824b-67fb1e8aa40b" data-toggle="tab">
+                                        
+                                            NO CONTENT
+                                        
+                                    </a>
+                                </li>
+                                
+                            </ul>
+                            <div class="tab-content">
+                                
+                                <div class="tab-pane active" id="request-manufacturers-get-manufacturers-by-nationality-responses-fe1ac871-464b-4d8b-b69b-b9dcb12c3a12">
+                                    <table class="table table-bordered">
+                                        <tr><th style="width: 20%;">Status</th><td>200 OK</td></tr>
+                                        
+                                        <tr><th style="width: 20%;">Content-Type</th><td>application/json</td></tr>
+                                        
+                                        
+                                            
+                                            <tr><td class="response-text-sample" colspan="2">
+                                                <pre><code>{
+    "currentPage": 1,
+    "totalPages": 1,
+    "pageSize": 10,
+    "totalItems": 2,
+    "manufacturers": [
+        {
+            "id": 13,
+            "name": "Sharp's Brewery",
+            "nationality": "United Kingdom"
+        },
+        {
+            "id": 14,
+            "name": "Black Sheep Brewery",
+            "nationality": "United Kingdom"
+        }
+    ]
+}</code></pre>
+                                            </td></tr>
+                                            
+                                        
+                                    </table>
+                                </div>
+                                
+                                <div class="tab-pane" id="request-manufacturers-get-manufacturers-by-nationality-responses-4dccc4ed-8aa8-4a03-824b-67fb1e8aa40b">
+                                    <table class="table table-bordered">
+                                        <tr><th style="width: 20%;">Status</th><td>204 No Content</td></tr>
+                                        
+                                        
+                                            
+                                            <tr><td class="response-text-sample" colspan="2">
+                                                <pre><code>{
+    "currentPage": 1,
+    "totalPages": 1,
+    "pageSize": 10,
+    "totalItems": 2,
+    "manufacturers": [
+        {
+            "id": 13,
+            "name": "Sharp's Brewery",
+            "nationality": "United Kingdom"
+        },
+        {
+            "id": 14,
+            "name": "Black Sheep Brewery",
+            "nationality": "United Kingdom"
+        }
+    ]
+}</code></pre>
+                                            </td></tr>
+                                            
+                                        
+                                    </table>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        
+
+                        <hr>
+                    </div>
+                    
+                    
+                    <div class="request">
+
+                        <h4 id="request-manufacturers-get-one-manufacturer-by-id">
+                            Get one manufacturer by id
+                            <a href="#request-manufacturers-get-one-manufacturer-by-id"><i class="glyphicon glyphicon-link"></i></a>
+                        </h4>
+
+                        <div><p>Get manufacturers from the catalog by nationality.</p>
+
+<p>By default, page size is 10 elements and results are sorted by id in ascending order.</p>
+
+<p>This request can be performed without any authentication.</p>
+</div>
+
+                        <div>
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li role="presentation" class="active"><a href="#request-manufacturers-get-one-manufacturer-by-id-example-curl" data-toggle="tab">Curl</a></li>
+                                <li role="presentation"><a href="#request-manufacturers-get-one-manufacturer-by-id-example-http" data-toggle="tab">HTTP</a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="request-manufacturers-get-one-manufacturer-by-id-example-curl">
+                                    <pre><code class="hljs curl">curl -X GET "http://localhost:8080/beercatalog/manufacturers/1"</code></pre>
+                                </div>
+                                <div class="tab-pane" id="request-manufacturers-get-one-manufacturer-by-id-example-http">
+                                    <pre><code class="hljs http">GET /beercatalog/manufacturers/1 HTTP/1.1
+Host: localhost:8080</code></pre>
+                                </div>
+                            </div>
+                        </div>
+
+                        
+                        <div>
+                            <ul class="nav nav-tabs" role="tablist">
+                                
+                                <li role="presentation" class="active">
+                                    <a href="#request-manufacturers-get-one-manufacturer-by-id-responses-28bb09fc-aa73-497a-b0d5-34a9a68a9f2c" data-toggle="tab">
+                                        
+                                            OK
+                                        
+                                    </a>
+                                </li>
+                                
+                                <li role="presentation">
+                                    <a href="#request-manufacturers-get-one-manufacturer-by-id-responses-50c11ad8-cc75-41e0-bfec-20bd07bb15e5" data-toggle="tab">
+                                        
+                                            NOT FOUND
+                                        
+                                    </a>
+                                </li>
+                                
+                                <li role="presentation">
+                                    <a href="#request-manufacturers-get-one-manufacturer-by-id-responses-f715dab8-5d7e-4a78-a0f1-b85bf7090d68" data-toggle="tab">
+                                        
+                                            OK
+                                        
+                                    </a>
+                                </li>
+                                
+                            </ul>
+                            <div class="tab-content">
+                                
+                                <div class="tab-pane active" id="request-manufacturers-get-one-manufacturer-by-id-responses-28bb09fc-aa73-497a-b0d5-34a9a68a9f2c">
+                                    <table class="table table-bordered">
+                                        <tr><th style="width: 20%;">Status</th><td>200 OK</td></tr>
+                                        
+                                        <tr><th style="width: 20%;">Content-Type</th><td>application/json</td></tr>
+                                        
+                                        
+                                            
+                                            <tr><td class="response-text-sample" colspan="2">
+                                                <pre><code>{
+    "id": 1,
+    "name": "Anheuser-Busch",
+    "nationality": "United States"
+}</code></pre>
+                                            </td></tr>
+                                            
+                                        
+                                    </table>
+                                </div>
+                                
+                                <div class="tab-pane" id="request-manufacturers-get-one-manufacturer-by-id-responses-50c11ad8-cc75-41e0-bfec-20bd07bb15e5">
+                                    <table class="table table-bordered">
+                                        <tr><th style="width: 20%;">Status</th><td>404 Not Found</td></tr>
+                                        
+                                        <tr><th style="width: 20%;">Content-Type</th><td>application/json</td></tr>
+                                        
+                                        
+                                            
+                                            <tr><td class="response-text-sample" colspan="2">
+                                                <pre><code>{
+    "status": 404,
+    "message": "Manufacturer not found with id: 0",
+    "currentTimeStamp": "26-01-2022 19:07:58"
+}</code></pre>
+                                            </td></tr>
+                                            
+                                        
+                                    </table>
+                                </div>
+                                
+                                <div class="tab-pane" id="request-manufacturers-get-one-manufacturer-by-id-responses-f715dab8-5d7e-4a78-a0f1-b85bf7090d68">
+                                    <table class="table table-bordered">
+                                        <tr><th style="width: 20%;">Status</th><td>200 OK</td></tr>
+                                        
+                                        <tr><th style="width: 20%;">Content-Type</th><td>application/json</td></tr>
+                                        
+                                        
+                                            
+                                            <tr><td class="response-text-sample" colspan="2">
+                                                <pre><code>{
+    "id": 1,
+    "name": "Anheuser-Busch",
+    "nationality": "United States"
+}</code></pre>
+                                            </td></tr>
+                                            
+                                        
+                                    </table>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        
+
+                        <hr>
+                    </div>
+                    
+                    
+                    <div class="request">
+
+                        <h4 id="request-manufacturers-create-a-new-manufacturer">
+                            Create a new manufacturer
+                            <a href="#request-manufacturers-create-a-new-manufacturer"><i class="glyphicon glyphicon-link"></i></a>
+                        </h4>
+
+                        <div><p>Creates a new manufacturer from a well-formed JSON with the required fields.</p>
+
+<p>Required fields are:</p>
+
+<ul>
+<li><strong>name</strong></li>
+<li><strong>nationality</strong>
+<br /></li>
+</ul>
+
+<p><strong>Admin</strong> user can create a new manufacturer. This action will trigger a user creation related to the new manufacturer. The default credentials for the new user follow this pattern:</p>
+
+<ul>
+<li><strong>username:</strong> {newManufacturerName}@provider.com</li>
+<li><strong>pwd:</strong> provider
+<br /></li>
+</ul>
+
+<p>This new user will also be assigned with the role &ldquo;<strong>ROLE_MANUFACTURER</strong>&rdquo;.</p>
+
+<p><strong>Eg:</strong> Manufacturer created with name &ldquo;<strong>damm</strong>&rdquo; will create a user with the following credentials:</p>
+
+<ul>
+<li><a href="mailto:damm@provider.com"><strong>damm@provider.com</strong></a></li>
+<li><strong>provider</strong>
+<br /></li>
+</ul>
+
+<p><strong>Manufacturer</strong> can not create a new manufacturer.</p>
+
+<p><strong>Anonymous</strong> user can not create a new manufacturer.</p>
+
+<p>If using <strong>Postman</strong> when changing between users, do not forget to <strong>clean cookies</strong> between each user test case.</p>
+</div>
+
+                        <div>
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li role="presentation" class="active"><a href="#request-manufacturers-create-a-new-manufacturer-example-curl" data-toggle="tab">Curl</a></li>
+                                <li role="presentation"><a href="#request-manufacturers-create-a-new-manufacturer-example-http" data-toggle="tab">HTTP</a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="request-manufacturers-create-a-new-manufacturer-example-curl">
+                                    <pre><code class="hljs curl">curl -X POST -d '{
+    "name": "Damm",
+    "nationality": "Spain"
+}' "http://localhost:8080/beercatalog/manufacturers"</code></pre>
+                                </div>
+                                <div class="tab-pane" id="request-manufacturers-create-a-new-manufacturer-example-http">
+                                    <pre><code class="hljs http">POST /beercatalog/manufacturers HTTP/1.1
+Host: localhost:8080
+
+{
+    "name": "Damm",
+    "nationality": "Spain"
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+
+                        
+                        <div>
+                            <ul class="nav nav-tabs" role="tablist">
+                                
+                                <li role="presentation" class="active">
+                                    <a href="#request-manufacturers-create-a-new-manufacturer-responses-6a3faf19-523b-401f-b332-88f3fe8c0a55" data-toggle="tab">
+                                        
+                                            OK
+                                        
+                                    </a>
+                                </li>
+                                
+                                <li role="presentation">
+                                    <a href="#request-manufacturers-create-a-new-manufacturer-responses-1c85b65e-0ea2-4665-bd1e-7bd6154758a2" data-toggle="tab">
+                                        
+                                            MISSING REQUIRED FIELDS
+                                        
+                                    </a>
+                                </li>
+                                
+                                <li role="presentation">
+                                    <a href="#request-manufacturers-create-a-new-manufacturer-responses-0c13b21f-bbb1-4a37-9e78-6d1055f08692" data-toggle="tab">
+                                        
+                                            NAME ALREADY EXISTS
+                                        
+                                    </a>
+                                </li>
+                                
+                                <li role="presentation">
+                                    <a href="#request-manufacturers-create-a-new-manufacturer-responses-6157e04e-7a02-48db-89fe-925289619596" data-toggle="tab">
+                                        
+                                            UNAUTHORIZED
+                                        
+                                    </a>
+                                </li>
+                                
+                                <li role="presentation">
+                                    <a href="#request-manufacturers-create-a-new-manufacturer-responses-35f1a6de-3979-4da1-a7a1-2345cf2b6404" data-toggle="tab">
+                                        
+                                            FORBIDDEN
+                                        
+                                    </a>
+                                </li>
+                                
+                            </ul>
+                            <div class="tab-content">
+                                
+                                <div class="tab-pane active" id="request-manufacturers-create-a-new-manufacturer-responses-6a3faf19-523b-401f-b332-88f3fe8c0a55">
+                                    <table class="table table-bordered">
+                                        <tr><th style="width: 20%;">Status</th><td>200 OK</td></tr>
+                                        
+                                        <tr><th style="width: 20%;">Content-Type</th><td>application/json</td></tr>
+                                        
+                                        
+                                            
+                                            <tr><td class="response-text-sample" colspan="2">
+                                                <pre><code>{
+    "id": 15,
+    "name": "Damm",
+    "nationality": "Spain"
+}</code></pre>
+                                            </td></tr>
+                                            
+                                        
+                                    </table>
+                                </div>
+                                
+                                <div class="tab-pane" id="request-manufacturers-create-a-new-manufacturer-responses-1c85b65e-0ea2-4665-bd1e-7bd6154758a2">
+                                    <table class="table table-bordered">
+                                        <tr><th style="width: 20%;">Status</th><td>422 Unprocessable Entity (WebDAV) (RFC 4918)</td></tr>
+                                        
+                                        <tr><th style="width: 20%;">Content-Type</th><td>application/json</td></tr>
+                                        
+                                        
+                                            
+                                            <tr><td class="response-text-sample" colspan="2">
+                                                <pre><code>{
+    "status": 422,
+    "message": "The requested action could not be executed when required fields are missing.",
+    "currentTimeStamp": "26-01-2022 22:47:26"
+}</code></pre>
+                                            </td></tr>
+                                            
+                                        
+                                    </table>
+                                </div>
+                                
+                                <div class="tab-pane" id="request-manufacturers-create-a-new-manufacturer-responses-0c13b21f-bbb1-4a37-9e78-6d1055f08692">
+                                    <table class="table table-bordered">
+                                        <tr><th style="width: 20%;">Status</th><td>406 Not Acceptable</td></tr>
+                                        
+                                        <tr><th style="width: 20%;">Content-Type</th><td>application/json</td></tr>
+                                        
+                                        
+                                            
+                                            <tr><td class="response-text-sample" colspan="2">
+                                                <pre><code>{
+    "status": 406,
+    "message": "The name of the beer already exists. Please choose another name.",
+    "currentTimeStamp": "26-01-2022 19:48:23"
+}</code></pre>
+                                            </td></tr>
+                                            
+                                        
+                                    </table>
+                                </div>
+                                
+                                <div class="tab-pane" id="request-manufacturers-create-a-new-manufacturer-responses-6157e04e-7a02-48db-89fe-925289619596">
+                                    <table class="table table-bordered">
+                                        <tr><th style="width: 20%;">Status</th><td>401 Unauthorized</td></tr>
+                                        
+                                        <tr><th style="width: 20%;">Content-Type</th><td>application/json</td></tr>
+                                        
+                                        
+                                            
+                                            <tr><td class="response-text-sample" colspan="2">
+                                                <pre><code>{
+    "timestamp": "2022-01-26T21:32:33.924+00:00",
+    "status": 401,
+    "error": "Unauthorized",
+    "message": "Unauthorized",
+    "path": "/beercatalog/beers"
+}</code></pre>
+                                            </td></tr>
+                                            
+                                        
+                                    </table>
+                                </div>
+                                
+                                <div class="tab-pane" id="request-manufacturers-create-a-new-manufacturer-responses-35f1a6de-3979-4da1-a7a1-2345cf2b6404">
+                                    <table class="table table-bordered">
+                                        <tr><th style="width: 20%;">Status</th><td>403 Forbidden</td></tr>
+                                        
+                                        <tr><th style="width: 20%;">Content-Type</th><td>application/json</td></tr>
+                                        
+                                        
+                                            
+                                            <tr><td class="response-text-sample" colspan="2">
+                                                <pre><code>{
+    "status": 403,
+    "message": "The authenticated user does not have the necessary permissions to access the resource.",
+    "currentTimeStamp": "26-01-2022 22:40:45"
+}</code></pre>
+                                            </td></tr>
+                                            
+                                        
+                                    </table>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        
+
+                        <hr>
+                    </div>
+                    
+                    
+                    <div class="request">
+
+                        <h4 id="request-manufacturers-update-a-manufacturer">
+                            Update a manufacturer
+                            <a href="#request-manufacturers-update-a-manufacturer"><i class="glyphicon glyphicon-link"></i></a>
+                        </h4>
+
+                        <div><p>Updates a manufacturer from a well-formed JSON with the required fields.</p>
+
+<p>Required fields are:</p>
+
+<ul>
+<li><strong>id</strong></li>
+<li><strong>name</strong></li>
+<li><strong>nationality</strong>
+<br /></li>
+</ul>
+
+<p><strong>Admin</strong> user can update any manufacturer.</p>
+
+<p><strong>Manufacturer</strong> user can update a manufacturer <strong>only</strong> if it is its own manufacturer.</p>
+
+<p><strong>Anonymous</strong> user can not update a manufacturer.</p>
+
+<p>If using <strong>Postman</strong> when changing between users, do not forget to <strong>clean cookies</strong> between each user test case.</p>
+</div>
+
+                        <div>
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li role="presentation" class="active"><a href="#request-manufacturers-update-a-manufacturer-example-curl" data-toggle="tab">Curl</a></li>
+                                <li role="presentation"><a href="#request-manufacturers-update-a-manufacturer-example-http" data-toggle="tab">HTTP</a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="request-manufacturers-update-a-manufacturer-example-curl">
+                                    <pre><code class="hljs curl">curl -X PUT -d '{
+    "id": 3,
+    "name": "Tröegs Brewing Company",
+    "nationality": "Germany"
+}' "http://localhost:8080/beercatalog/manufacturers"</code></pre>
+                                </div>
+                                <div class="tab-pane" id="request-manufacturers-update-a-manufacturer-example-http">
+                                    <pre><code class="hljs http">PUT /beercatalog/manufacturers HTTP/1.1
+Host: localhost:8080
+
+{
+    "id": 3,
+    "name": "Tröegs Brewing Company",
+    "nationality": "Germany"
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+
+                        
+                        <div>
+                            <ul class="nav nav-tabs" role="tablist">
+                                
+                                <li role="presentation" class="active">
+                                    <a href="#request-manufacturers-update-a-manufacturer-responses-8a1eafd9-1d11-4cda-9155-cbc3dbf4389c" data-toggle="tab">
+                                        
+                                            OK
+                                        
+                                    </a>
+                                </li>
+                                
+                                <li role="presentation">
+                                    <a href="#request-manufacturers-update-a-manufacturer-responses-f2d38b99-5e96-4136-98b2-03323646a31e" data-toggle="tab">
+                                        
+                                            MISSING REQUIRED FIELDS
+                                        
+                                    </a>
+                                </li>
+                                
+                                <li role="presentation">
+                                    <a href="#request-manufacturers-update-a-manufacturer-responses-372a0f57-593d-462b-a324-ed33c9800b4b" data-toggle="tab">
+                                        
+                                            NAME ALREADY EXISTS
+                                        
+                                    </a>
+                                </li>
+                                
+                                <li role="presentation">
+                                    <a href="#request-manufacturers-update-a-manufacturer-responses-cc7232a9-e7bf-4226-9721-544231cae616" data-toggle="tab">
+                                        
+                                            NOT FOUND
+                                        
+                                    </a>
+                                </li>
+                                
+                                <li role="presentation">
+                                    <a href="#request-manufacturers-update-a-manufacturer-responses-d25f82f5-f697-42a2-b449-822379b59902" data-toggle="tab">
+                                        
+                                            UNAUTHORIZED
+                                        
+                                    </a>
+                                </li>
+                                
+                                <li role="presentation">
+                                    <a href="#request-manufacturers-update-a-manufacturer-responses-5eba17a1-771b-4e30-9553-3f2abe3e9e45" data-toggle="tab">
+                                        
+                                            FORBIDDEN
+                                        
+                                    </a>
+                                </li>
+                                
+                            </ul>
+                            <div class="tab-content">
+                                
+                                <div class="tab-pane active" id="request-manufacturers-update-a-manufacturer-responses-8a1eafd9-1d11-4cda-9155-cbc3dbf4389c">
+                                    <table class="table table-bordered">
+                                        <tr><th style="width: 20%;">Status</th><td>200 OK</td></tr>
+                                        
+                                        <tr><th style="width: 20%;">Content-Type</th><td>application/json</td></tr>
+                                        
+                                        
+                                            
+                                            <tr><td class="response-text-sample" colspan="2">
+                                                <pre><code>{
+    "id": 3,
+    "name": "Tröegs Brewing Kompany",
+    "nationality": "Germany"
+}</code></pre>
+                                            </td></tr>
+                                            
+                                        
+                                    </table>
+                                </div>
+                                
+                                <div class="tab-pane" id="request-manufacturers-update-a-manufacturer-responses-f2d38b99-5e96-4136-98b2-03323646a31e">
+                                    <table class="table table-bordered">
+                                        <tr><th style="width: 20%;">Status</th><td>422 Unprocessable Entity (WebDAV) (RFC 4918)</td></tr>
+                                        
+                                        <tr><th style="width: 20%;">Content-Type</th><td>application/json</td></tr>
+                                        
+                                        
+                                            
+                                            <tr><td class="response-text-sample" colspan="2">
+                                                <pre><code>{
+    "status": 422,
+    "message": "The requested action could not be executed when required fields are missing.",
+    "currentTimeStamp": "26-01-2022 19:47:26"
+}</code></pre>
+                                            </td></tr>
+                                            
+                                        
+                                    </table>
+                                </div>
+                                
+                                <div class="tab-pane" id="request-manufacturers-update-a-manufacturer-responses-372a0f57-593d-462b-a324-ed33c9800b4b">
+                                    <table class="table table-bordered">
+                                        <tr><th style="width: 20%;">Status</th><td>406 Not Acceptable</td></tr>
+                                        
+                                        <tr><th style="width: 20%;">Content-Type</th><td>application/json</td></tr>
+                                        
+                                        
+                                            
+                                            <tr><td class="response-text-sample" colspan="2">
+                                                <pre><code>{
+    "status": 406,
+    "message": "The name of the manufacturer already exists. Please choose another name.",
+    "currentTimeStamp": "26-01-2022 19:48:23"
+}</code></pre>
+                                            </td></tr>
+                                            
+                                        
+                                    </table>
+                                </div>
+                                
+                                <div class="tab-pane" id="request-manufacturers-update-a-manufacturer-responses-cc7232a9-e7bf-4226-9721-544231cae616">
+                                    <table class="table table-bordered">
+                                        <tr><th style="width: 20%;">Status</th><td>404 Not Found</td></tr>
+                                        
+                                        <tr><th style="width: 20%;">Content-Type</th><td>application/json</td></tr>
+                                        
+                                        
+                                            
+                                            <tr><td class="response-text-sample" colspan="2">
+                                                <pre><code>{
+    "status": 404,
+    "message": "Could not find manufacturer with: 50 for deletion.",
+    "currentTimeStamp": "27-01-2022 19:45:36"
+}</code></pre>
+                                            </td></tr>
+                                            
+                                        
+                                    </table>
+                                </div>
+                                
+                                <div class="tab-pane" id="request-manufacturers-update-a-manufacturer-responses-d25f82f5-f697-42a2-b449-822379b59902">
+                                    <table class="table table-bordered">
+                                        <tr><th style="width: 20%;">Status</th><td>401 Unauthorized</td></tr>
+                                        
+                                        <tr><th style="width: 20%;">Content-Type</th><td>application/json</td></tr>
+                                        
+                                        
+                                            
+                                            <tr><td class="response-text-sample" colspan="2">
+                                                <pre><code>{
+    "timestamp": "2022-01-26T21:32:33.924+00:00",
+    "status": 401,
+    "error": "Unauthorized",
+    "message": "Unauthorized",
+    "path": "/beercatalog/beers"
+}</code></pre>
+                                            </td></tr>
+                                            
+                                        
+                                    </table>
+                                </div>
+                                
+                                <div class="tab-pane" id="request-manufacturers-update-a-manufacturer-responses-5eba17a1-771b-4e30-9553-3f2abe3e9e45">
+                                    <table class="table table-bordered">
+                                        <tr><th style="width: 20%;">Status</th><td>403 Forbidden</td></tr>
+                                        
+                                        <tr><th style="width: 20%;">Content-Type</th><td>application/json</td></tr>
+                                        
+                                        
+                                            
+                                            <tr><td class="response-text-sample" colspan="2">
+                                                <pre><code>{
+    "status": 403,
+    "message": "The authenticated user does not have the necessary permissions to access the resource.",
+    "currentTimeStamp": "26-01-2022 19:40:45"
+}</code></pre>
+                                            </td></tr>
+                                            
+                                        
+                                    </table>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        
+
+                        <hr>
+                    </div>
+                    
+                    
+                    <div class="request">
+
+                        <h4 id="request-manufacturers-delete-a-manufacturer">
+                            Delete a manufacturer
+                            <a href="#request-manufacturers-delete-a-manufacturer"><i class="glyphicon glyphicon-link"></i></a>
+                        </h4>
+
+                        <div><p>Deletes a manufacturer given a valid id.</p>
+
+<p><strong>Admin</strong> user can delete any manufacturer.</p>
+
+<p>This action will trigger the deletion of the following:</p>
+
+<ul>
+<li><strong>User</strong> and <strong>authorities</strong> related to the deleted manufacturer</li>
+<li><strong>Beers</strong> related to the deleted manufacturer
+<br /></li>
+</ul>
+
+<p><strong>Manufacturer</strong> user can not delete a manufacturer.</p>
+
+<p><strong>Anonymous</strong> user can not delete a manufacturer.</p>
+
+<p>If using <strong>Postman</strong> when changing between users, do not forget to <strong>clean cookies</strong> between each user test case.</p>
+</div>
+
+                        <div>
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li role="presentation" class="active"><a href="#request-manufacturers-delete-a-manufacturer-example-curl" data-toggle="tab">Curl</a></li>
+                                <li role="presentation"><a href="#request-manufacturers-delete-a-manufacturer-example-http" data-toggle="tab">HTTP</a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="request-manufacturers-delete-a-manufacturer-example-curl">
+                                    <pre><code class="hljs curl">curl -X DELETE "http://localhost:8080/beercatalog/manufacturers/9"</code></pre>
+                                </div>
+                                <div class="tab-pane" id="request-manufacturers-delete-a-manufacturer-example-http">
+                                    <pre><code class="hljs http">DELETE /beercatalog/manufacturers/9 HTTP/1.1
+Host: localhost:8080</code></pre>
+                                </div>
+                            </div>
+                        </div>
+
+                        
+                        <div>
+                            <ul class="nav nav-tabs" role="tablist">
+                                
+                                <li role="presentation" class="active">
+                                    <a href="#request-manufacturers-delete-a-manufacturer-responses-6dd91e37-68e1-4230-a28a-8c21e7cf2796" data-toggle="tab">
+                                        
+                                            OK
+                                        
+                                    </a>
+                                </li>
+                                
+                                <li role="presentation">
+                                    <a href="#request-manufacturers-delete-a-manufacturer-responses-d2ba7891-14c3-4a29-87f8-a74f4b71a9a1" data-toggle="tab">
+                                        
+                                            NOT FOUND
+                                        
+                                    </a>
+                                </li>
+                                
+                                <li role="presentation">
+                                    <a href="#request-manufacturers-delete-a-manufacturer-responses-125cfb93-d352-4701-945e-da4e8d0a775a" data-toggle="tab">
+                                        
+                                            UNAUTHORIZED
+                                        
+                                    </a>
+                                </li>
+                                
+                                <li role="presentation">
+                                    <a href="#request-manufacturers-delete-a-manufacturer-responses-a90d66ba-0647-4c09-8f8e-765533d48873" data-toggle="tab">
+                                        
+                                            FORBIDDEN
+                                        
+                                    </a>
+                                </li>
+                                
+                            </ul>
+                            <div class="tab-content">
+                                
+                                <div class="tab-pane active" id="request-manufacturers-delete-a-manufacturer-responses-6dd91e37-68e1-4230-a28a-8c21e7cf2796">
+                                    <table class="table table-bordered">
+                                        <tr><th style="width: 20%;">Status</th><td>200 OK</td></tr>
+                                        
+                                        <tr><th style="width: 20%;">Content-Type</th><td>application/json</td></tr>
+                                        
+                                        
+                                            
+                                            <tr><td class="response-text-sample" colspan="2">
+                                                <pre><code>{
+    "status": 200,
+    "message": "Manufacturer deleted with id: 9. If the manufacturer had a user, authorities or related beers, they were also deleted.",
+    "currentTimeStamp": "27-01-2022 21:13:24"
+}</code></pre>
+                                            </td></tr>
+                                            
+                                        
+                                    </table>
+                                </div>
+                                
+                                <div class="tab-pane" id="request-manufacturers-delete-a-manufacturer-responses-d2ba7891-14c3-4a29-87f8-a74f4b71a9a1">
+                                    <table class="table table-bordered">
+                                        <tr><th style="width: 20%;">Status</th><td>404 Not Found</td></tr>
+                                        
+                                        <tr><th style="width: 20%;">Content-Type</th><td>application/json</td></tr>
+                                        
+                                        
+                                            
+                                            <tr><td class="response-text-sample" colspan="2">
+                                                <pre><code>{
+    "status": 404,
+    "message": "Could not find manufacturer with: 50 for deletion.",
+    "currentTimeStamp": "27-01-2022 20:10:56"
+}</code></pre>
+                                            </td></tr>
+                                            
+                                        
+                                    </table>
+                                </div>
+                                
+                                <div class="tab-pane" id="request-manufacturers-delete-a-manufacturer-responses-125cfb93-d352-4701-945e-da4e8d0a775a">
+                                    <table class="table table-bordered">
+                                        <tr><th style="width: 20%;">Status</th><td>401 Unauthorized</td></tr>
+                                        
+                                        <tr><th style="width: 20%;">Content-Type</th><td>application/json</td></tr>
+                                        
+                                        
+                                            
+                                            <tr><td class="response-text-sample" colspan="2">
+                                                <pre><code>{
+    "timestamp": "2022-01-26T21:32:33.924+00:00",
+    "status": 401,
+    "error": "Unauthorized",
+    "message": "Unauthorized",
+    "path": "/beercatalog/beers"
+}</code></pre>
+                                            </td></tr>
+                                            
+                                        
+                                    </table>
+                                </div>
+                                
+                                <div class="tab-pane" id="request-manufacturers-delete-a-manufacturer-responses-a90d66ba-0647-4c09-8f8e-765533d48873">
+                                    <table class="table table-bordered">
+                                        <tr><th style="width: 20%;">Status</th><td>403 Forbidden</td></tr>
+                                        
+                                        <tr><th style="width: 20%;">Content-Type</th><td>application/json</td></tr>
+                                        
+                                        
+                                            
+                                            <tr><td class="response-text-sample" colspan="2">
+                                                <pre><code>{
+    "status": 403,
+    "message": "The authenticated user does not have the necessary permissions to access the resource.",
+    "currentTimeStamp": "26-01-2022 21:40:45"
+}</code></pre>
+                                            </td></tr>
+                                            
+                                        
+                                    </table>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        
+
+                        <hr>
+                    </div>
+                    
+
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-2.2.2.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $("table:not(.table)").addClass('table table-bordered');
+    });
+</script>
+</body>
+</html>
