@@ -8,7 +8,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.catalog.beercatalog.entity.Beer;
+import com.catalog.beercatalog.exception.IdSpecifiedException;
 import com.catalog.beercatalog.exception.MissingRequiredsException;
+import com.catalog.beercatalog.exception.NameAlreadyExistsException;
 import com.catalog.beercatalog.exception.NotFoundException;
 import com.catalog.beercatalog.service.BeerService;
 import com.catalog.beercatalog.utils.DateFormatUtil;
@@ -17,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,6 +40,7 @@ public class BeerController {
     public ResponseEntity<Map<String, Object>> findAll(
         @RequestParam(required = false, name = "name") String name, 
         @RequestParam(required = false, name = "type") String type,
+        @RequestParam(required = false, name = "description") String description,
         @RequestParam(required = false, name = "abv_gt") BigDecimal abvGt,
         @RequestParam(required = false, name = "abv_lt") BigDecimal abvLt,
         @RequestParam(required = false, name = "manufacturer_id") Long manufacturerId,
@@ -54,7 +56,8 @@ public class BeerController {
         // Get the paged and sorted result
         Page<Beer> pagedResult = beerSv.findAll(
             name, 
-            type, 
+            type,
+            description, 
             abvGt, 
             abvLt, 
             manufacturerId, 
@@ -63,7 +66,7 @@ public class BeerController {
             pageNum, 
             pageSize, 
             sort);
-
+        
         beers = pagedResult.getContent();
 
         if (beers.isEmpty()) {
@@ -93,39 +96,41 @@ public class BeerController {
         return beer;
     }
 
-    @PreAuthorize("isItOwnManufacturer(#beer)")
     @PostMapping()
     public Beer addBeer(@RequestBody Beer beer) {
 
-        if (beer.getName() == null || 
-            beer.getDescription() == null || 
-            beer.getAbv() == null || 
-            beer.getManufacturer().getId() == null) {
-                throw new MissingRequiredsException("The requested action could not be executed when required fields are missing."); 
+        if(beer.getId() != null) {
+            throw new IdSpecifiedException("Can not specify id field when perfoming a post request.");
         }
 
-        // In case the id is defined we set it to 0 for manually force the insert
-        beer.setId(Long.valueOf(0));
+        checkIfRequiredFieldsMissing(beer);
+
+        checkIfNameAlreadyExists(beer.getName());
 
         return beerSv.save(beer);
     }
 
-    @PreAuthorize("isItOwnManufacturer(#beer)")
+    
     @PutMapping()
     public Beer updateBeer(@RequestBody Beer beer) {
 
-        if (beer.getId() == null || 
-            beer.getName() == null || 
-            beer.getDescription() == null || 
-            beer.getAbv() == null || 
-            beer.getManufacturer().getId() == null) {
-                throw new MissingRequiredsException("The requested action could not be executed when required fields are missing.");
+        if (beer.getId() == null) {
+            throw new MissingRequiredsException("The requested action could not be executed when required fields are missing.");
         }
+
+        checkIfRequiredFieldsMissing(beer);
+
+        Beer beerToUpdate = beerSv.findById(beer.getId());
+
+        if (beerToUpdate == null) {
+            throw new NotFoundException("Beer not found with id: " + beer.getId());
+        }
+
+        checkIfNameAlreadyExistsExcludingId(beer.getName(), beerToUpdate.getId());
 
         return beerSv.save(beer);
     }
 
-    @PreAuthorize("isItOwnManufacturer(#beer)")
     @DeleteMapping("/{id}")
     public ResponseEntity<RestResponse> deleteBeer(@PathVariable Long id) {
 
@@ -137,8 +142,32 @@ public class BeerController {
 
         beerSv.deleteById(id);
 
-        RestResponse response = new RestResponse(202, "Beer deleted with id: " + id, DateFormatUtil.getFormattedDate(new Date()));
+        RestResponse response = new RestResponse(200, "Beer deleted with id: " + id, DateFormatUtil.getFormattedDate(new Date()));
         
-        return new ResponseEntity<RestResponse>(response, HttpStatus.ACCEPTED);
+        return new ResponseEntity<RestResponse>(response, HttpStatus.OK);
+    }
+
+    public void checkIfRequiredFieldsMissing(Beer beer) {
+        if (beer.getName() == null || 
+            beer.getType() == null || 
+            beer.getDescription() == null || 
+            beer.getAbv() == null || 
+            beer.getManufacturer() == null || 
+            (beer.getManufacturer() != null && beer.getManufacturer().getId() == null)) {
+                throw new MissingRequiredsException("The requested action could not be executed when required fields are missing.");
+        }
+    }
+
+    public void checkIfNameAlreadyExists(String name) {
+        if (beerSv.countAllByName(name) > 0) {
+            throw new NameAlreadyExistsException("The name of the beer already exists. Please choose another name."); 
+        }
+    }
+
+    public void checkIfNameAlreadyExistsExcludingId(String name, Long id) {
+        Long count = beerSv.countAllByNameExcludingId(name, id);
+        if (count != null && count != 0) {
+            throw new NameAlreadyExistsException("The name of the beer already exists. Please choose another name."); 
+        }
     }
 }
