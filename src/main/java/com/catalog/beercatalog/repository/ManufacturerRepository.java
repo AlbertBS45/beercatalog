@@ -21,5 +21,19 @@ public interface ManufacturerRepository extends JpaRepository<Manufacturer,Long>
         @Param("name") String name,
         @Param("nationality") String nationality,
         Pageable pageable);
+
+    Manufacturer getByName(String name);
+
+    Manufacturer getByNationality(String nationality);
+
+    Long countAllByName(String name);
+
+    @Query(
+        value = "SELECT count(m.id) FROM manufacturers m " 
+        + "WHERE m.name = CAST(:name as VARCHAR) " 
+        + "AND m.id != CAST(:id as INTEGER)",
+        nativeQuery = true
+    )
+    Long countByNameExcludingId(@Param("name") String name, @Param("id") Long id);
 }
 
