@@ -16,6 +16,7 @@ import com.catalog.beercatalog.utils.ServiceUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -35,6 +36,9 @@ public class ManufacturerService {
     @Autowired
     private AuthorityRepository authorityRepo;
 
+    @Autowired
+    private ServiceUtil serviceUtil;
+
     @Transactional(readOnly = true)
     public Page<Manufacturer> findAll(
         String name,
@@ -47,7 +51,7 @@ public class ManufacturerService {
         pageNum--;
 
         // Making the request pageable and sortable
-        Pageable paging = ServiceUtil.generatePagingAndSorting(pageNum, pageSize, sort);
+        Pageable paging = serviceUtil.generatePagingAndSorting(pageNum, pageSize, sort);
         
         // Setting params values for query
         String ManufacturerParamName = (StringUtils.hasText(name) ? name : null);
@@ -77,14 +81,17 @@ public class ManufacturerService {
     }
 
     @Transactional
+    @PreAuthorize("@manufacturerCheckMethodSecurity.isItOwnManufacturer(#manufacturer)")
     public Manufacturer save(Manufacturer manufacturer) {
+
+        Boolean hasId = manufacturer.getId() != null ? true : false;
 
         Manufacturer manufacturerAddedOrUpdated = manufacturerRepo.save(manufacturer);
 
         // It was an insertion
-        if (manufacturer.getId() == 0) {
+        if (!hasId) {
 
-            //Insert user/provider
+            // Creating user/provider related to manufacturer
             String normalizedUsername = manufacturer.getName().replaceAll("\\s+","").trim().toLowerCase().concat("@provider.com");
 
             Provider provider = new Provider(
@@ -104,8 +111,7 @@ public class ManufacturerService {
     public void deleteById(Long id) {
 
         //Deleting all beers related to the manufacturer
-        List<Beer> beersRelatedToManufacturer = beerRepo.findAllBeersWithPaginationAndSorting(
-            null, null, null, null, id, null, null, null).getContent();
+        List<Beer> beersRelatedToManufacturer = beerRepo.findAllByManufacturer_Id(id);
         beerRepo.deleteAll(beersRelatedToManufacturer);
 
         //Deleting user/provider and authorities related to the manufacturer
@@ -113,6 +119,16 @@ public class ManufacturerService {
 
         //Deleting manufacturer
         manufacturerRepo.deleteById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public Long countAllByName(String name) {
+        return manufacturerRepo.countAllByName(name);
+    }
+
+    @Transactional(readOnly = true)
+    public Long countAllByNameExcludingId(String name, Long id) {
+        return manufacturerRepo.countByNameExcludingId(name, id);
     }
     
 }
