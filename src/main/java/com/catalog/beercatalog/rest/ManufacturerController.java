@@ -7,7 +7,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.catalog.beercatalog.entity.Manufacturer;
+import com.catalog.beercatalog.exception.IdSpecifiedException;
 import com.catalog.beercatalog.exception.MissingRequiredsException;
+import com.catalog.beercatalog.exception.NameAlreadyExistsException;
 import com.catalog.beercatalog.exception.NotFoundException;
 import com.catalog.beercatalog.service.ManufacturerService;
 import com.catalog.beercatalog.utils.DateFormatUtil;
@@ -16,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,9 +39,9 @@ public class ManufacturerController {
     public ResponseEntity<Map<String, Object>> findAll(
         @RequestParam(required = false, name = "name") String name,
         @RequestParam(required = false, name = "nationality") String nationality,
-        @RequestParam(defaultValue = "1") Integer pageNum,
-        @RequestParam(defaultValue = "10") Integer pageSize,
-        @RequestParam(defaultValue = "id,asc") String[] sort) 
+        @RequestParam(required = false, defaultValue = "1", name = "pageNum") Integer pageNum,
+        @RequestParam(required = false, defaultValue = "10", name = "pageSize") Integer pageSize,
+        @RequestParam(required = false, defaultValue = "id,asc", name = "sort") String[] sort) 
     {
 
         List<Manufacturer> manufacturers = new ArrayList<Manufacturer>();
@@ -85,26 +86,33 @@ public class ManufacturerController {
     @PostMapping()
     public Manufacturer addManufacturer(@RequestBody Manufacturer manufacturer) {
 
-        if (manufacturer.getName() == null || 
-            manufacturer.getNationality() == null) {
-                throw new MissingRequiredsException("The requested action could not be executed when required fields are missing."); 
+        if(manufacturer.getId() != null) {
+            throw new IdSpecifiedException("Can not specify id field when perfoming a post request.");
         }
 
-        // In case the id is defined we set it to 0 to manually force the insert
-        manufacturer.setId(Long.valueOf(0));
+        checkIfRequiredFieldsMissing(manufacturer);
+
+        checkIfNameAlreadyExists(manufacturer.getName());
 
         return manufacturerSv.save(manufacturer);
     }
 
-    @PreAuthorize("isItOwnManufacturer(#manufacturer)")
     @PutMapping()
     public Manufacturer updateManufacturer(@RequestBody Manufacturer manufacturer) {
 
-        if (manufacturer.getId() == null || 
-            manufacturer.getName() == null || 
-            manufacturer.getNationality() == null) {
+        if (manufacturer.getId() == null ) {
                 throw new MissingRequiredsException("The requested action could not be executed when required fields are missing."); 
         }
+
+        checkIfRequiredFieldsMissing(manufacturer);
+
+        Manufacturer manufacturerToUpdate = manufacturerSv.findById(manufacturer.getId());
+
+        if (manufacturerToUpdate == null) {
+            throw new NotFoundException("Could not find manufacturer with: " + manufacturer.getId() + " for deletion.");
+        }
+
+        checkIfNameAlreadyExistsExcludingId(manufacturer.getName(), manufacturerToUpdate.getId());
 
         return manufacturerSv.save(manufacturer);
     }
@@ -121,10 +129,29 @@ public class ManufacturerController {
         manufacturerSv.deleteById(id);
 
         RestResponse response = new RestResponse(
-            202,
-            "Manufacturer deleted with id: " + id + ". User, authorities and all related beers to the manufacturer were also deleted.", 
+            200,
+            "Manufacturer deleted with id: " + id + ". If the manufacturer had a user, authorities or related beers, they were also deleted.", 
             DateFormatUtil.getFormattedDate(new Date()));
 
-        return new ResponseEntity<RestResponse>(response, HttpStatus.ACCEPTED);
+        return new ResponseEntity<RestResponse>(response, HttpStatus.OK);
+    }
+
+    public void checkIfRequiredFieldsMissing(Manufacturer manufacturer) {
+        if (manufacturer.getName() == null || manufacturer.getNationality() == null ) {
+                throw new MissingRequiredsException("The requested action could not be executed when required fields are missing.");
+        }
+    }
+
+    public void checkIfNameAlreadyExists(String name) {
+        if (manufacturerSv.countAllByName(name) > 0) {
+            throw new NameAlreadyExistsException("The name of the manufacturer already exists. Please choose another name."); 
+        }
+    }
+
+    public void checkIfNameAlreadyExistsExcludingId(String name, Long id) {
+        Long count = manufacturerSv.countAllByNameExcludingId(name, id);
+        if (count != null && count != 0) {
+            throw new NameAlreadyExistsException("The name of the manufacturer already exists. Please choose another name."); 
+        }
     }
 }
