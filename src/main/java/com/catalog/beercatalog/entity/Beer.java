@@ -11,11 +11,17 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "beers")
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Beer {
     
     @Id
@@ -37,8 +43,6 @@ public class Beer {
     @ManyToOne()
     @JoinColumn(name = "manufacturer_id", nullable = false)
     private Manufacturer manufacturer;
-
-    public Beer() {}
 
     public Beer(String name, String type, String description, BigDecimal abv, Manufacturer manufacturer) {
         this.name = name;

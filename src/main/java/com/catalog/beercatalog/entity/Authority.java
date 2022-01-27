@@ -8,11 +8,17 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "authorities")
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Authority {
 
     @Id
@@ -24,8 +30,6 @@ public class Authority {
     @ManyToOne
     @JoinColumn(name = "provider_id")
     private Provider provider;
-
-    public Authority() {}
 
     public Authority(String name, Provider provider) {
         this.name = name;

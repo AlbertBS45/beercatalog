@@ -18,7 +18,10 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 
 // Our custom user table
@@ -30,6 +33,9 @@ import lombok.Data;
 })
 @Table(name = "providers")
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Provider {
     
     @Id
@@ -50,8 +56,6 @@ public class Provider {
     @JsonIgnore
     @OneToMany(mappedBy = "provider", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Authority> authorities;
-
-    public Provider(){}
 
     public Provider(String email, String pwd, Manufacturer manufacturer, List<Authority> authorities) {
         this.email = email;
