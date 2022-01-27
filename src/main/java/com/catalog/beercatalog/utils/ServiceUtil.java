@@ -7,10 +7,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ServiceUtil {
     
-    public static Pageable generatePagingAndSorting(Integer pageNum, Integer pageSize, String[] sort) {
+    public Pageable generatePagingAndSorting(Integer pageNum, Integer pageSize, String[] sort) {
 
         List<Order> orders = new ArrayList<Order>();
         
